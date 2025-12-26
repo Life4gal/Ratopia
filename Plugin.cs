@@ -14,12 +14,13 @@ public class RatopiaPlugin : BaseUnityPlugin
 
 	private static readonly string PluginFolder = Path.Combine(Paths.PluginPath, "Ratopia");
 
-	// private static readonly string FilePathQueenCharacter = Path.Combine(PluginFolder, "QueenCharacter.json");
+	private static readonly string FilePathQueenCharacter = Path.Combine(PluginFolder, "QueenCharacter.json");
+
 	private static readonly string FilePathProsperity = Path.Combine(PluginFolder, "Prosperity.json");
+
 	// private static readonly string FilePathResource = Path.Combine(PluginFolder, "Resource.json");
 	// private static readonly string FilePathPlant = Path.Combine(PluginFolder, "Plant.json");
 	// private static readonly string FilePathBuilding = Path.Combine(PluginFolder, "Building.json");
-	// private static readonly string FilePathCharacter = Path.Combine(PluginFolder, "Character.json");
 	private static readonly string FilePathItem = Path.Combine(PluginFolder, "Item.json");
 	// private static readonly string FilePathRatron = Path.Combine(PluginFolder, "Ratron.json");
 	// private static readonly string FilePathRecipe = Path.Combine(PluginFolder, "Recipe.json");
@@ -40,212 +41,100 @@ public class RatopiaPlugin : BaseUnityPlugin
 		LogForHarmony = Logger;
 	}
 
-	// [HarmonyPatch(typeof(DB_Mgr), "QueenCharacter_DB_Setting")]
-	// private class PatchQueenCharacter
-	// {
-	// 	private class AbilityDescription
-	// 	{
-	// 		public string Name;
-	// 		public string Description;
-	// 	}
-	//
-	// 	private class Entry
-	// 	{
-	// 		public string Name;
-	// 		public string Ability;
-	// 	}
-	//
-	// 	[Serializable]
-	// 	private class FileContent
-	// 	{
-	// 		public AbilityDescription[] Descriptions;
-	// 		public List<Entry> Characters;
-	// 	}
-	//
-	// 	// EXP(0.2) = +20经验值获取
-	// 	// StartRP(3) = +3研究点数
-	// 	// ATK(1)/DEF(1) = +1攻击力/防御力
-	// 	// HP(20) = +20生命值
-	// 	// SPD(0.1) = +10%移动速度
-	// 	// TP(1) = +1运输量
-	// 	// CitizenG(1) = +1移民能力等级
-	// 	// CityHappy(1) = +1幸福度
-	// 	// StartPia(5000) = +5000初始存款
-	// 	// LoanPlus(3) = +3贷款产品数量
-	// 	// StartLP(1) = +1领导者点数
-	// 	// GetProsRefresh(1) = +1里程碑刷新次数
-	// 	// StartMap(10) = +10地图探索区域
-	// 	// StartRelation(10) = +10发现国家的友好度
-	// 	private static readonly AbilityDescription[] Descriptions =
-	// 	[
-	// 		new()
-	// 		{
-	// 			Name = "000",
-	// 			Description =
-	// 				"This explains the function of each ability. " +
-	// 				"You can freely combine them to customize your desired Queen character" +
-	// 				"(comma-separated, e.g. \"ATK(1),DEF(1),HP(20)\")"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "EXP(0.2)",
-	// 			Description = "+20% Experience Points Earned (Scholar)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "StartRP(3)",
-	// 			Description = "+3 Research Points (Scholar)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "ATK(1)",
-	// 			Description = "+1 Attack (Warrior)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "DEF(1)",
-	// 			Description = "+1 Defense (Warrior)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "HP(20)",
-	// 			Description = "+20 HP (Warrior)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "SPD(0.1)",
-	// 			Description = "+10% Move Speed (Athlete)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "TP(1)",
-	// 			Description = "+1 Transport Volume (Athlete)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "CitizenG(1)",
-	// 			Description = "+1 New Citizen Ability Level (Idol)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "CityHappy(1)",
-	// 			Description = "+1 Happiness (Idol)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "StartPia(5000)",
-	// 			Description = "+5000 Beginning Deposit (Nobility)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "LoanPlus(3)",
-	// 			Description = "+3 Number of Loan Products (Nobility)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "StartLP(1)",
-	// 			Description = "+1 Leader Points (Strategist)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "GetProsRefresh(1)",
-	// 			Description = "+1 Number of Milestone Updates (Strategist)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "StartMap(10)",
-	// 			Description = "+10 Map Exploration Area (Diplomat)"
-	// 		},
-	// 		new()
-	// 		{
-	// 			Name = "StartRelation(10)",
-	// 			Description = "+10 New Country's Friendliness Rating (Diplomat)"
-	// 		}
-	// 	];
-	//
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("[QueenCharacter] Patching...");
-	//
-	// 		var db = __instance.m_QueenCharacter_DB;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_QueenCharacter_DB == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathQueenCharacter))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var characters = (
-	// 					from item in sheet.list
-	// 					where item.Enable != 0
-	// 					select new Entry
-	// 					{
-	// 						Name = item.Name,
-	// 						Ability = item.Ability,
-	// 					}
-	// 				).ToList();
-	//
-	// 				var content = new FileContent { Descriptions = Descriptions, Characters = characters };
-	// 				var fileContent = JsonConvert.SerializeObject(content, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathQueenCharacter, fileContent);
-	// 				LogForHarmony.LogInfo("[QueenCharacter] Bump File Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"[QueenCharacter] Bump File Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			try
-	// 			{
-	// 				var file = File.ReadAllText(FilePathQueenCharacter);
-	// 				var content = JsonConvert.DeserializeObject<FileContent>(file);
-	// 				var sheet = db.sheets[0];
-	//
-	// 				foreach (var character in content.Characters)
-	// 				{
-	// 					var item = sheet.list.Find(item => item.Name == character.Name);
-	// 					if (item == null)
-	// 					{
-	// 						LogForHarmony.LogWarning($"[QueenCharacter] Patch Failed: item {character.Name} not found");
-	// 						continue;
-	// 					}
-	//
-	// 					if (item.Enable == 0)
-	// 					{
-	// 						LogForHarmony.LogInfo($"[QueenCharacter] Patch Skipped: item {character.Name} not enabled");
-	// 						continue;
-	// 					}
-	//
-	// 					if (item.Ability == character.Ability)
-	// 					{
-	// 						LogForHarmony.LogInfo(
-	// 							$"[QueenCharacter] Patch Skipped: item [{character.Name}] not changed({character.Ability})"
-	// 						);
-	// 						continue;
-	// 					}
-	//
-	// 					LogForHarmony.LogInfo(
-	// 						$"[QueenCharacter] Patch [{character.Name}]: [{item.Ability}] ==> [{character.Ability}]"
-	// 					);
-	// 					item.Ability = character.Ability;
-	// 				}
-	//
-	// 				LogForHarmony.LogInfo("[QueenCharacter] Patch Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"[QueenCharacter] Patch Failed: {e}");
-	// 			}
-	// 		}
-	// 	}
-	// }
+	[HarmonyPatch(typeof(DB_Mgr), "QueenCharacter_DB_Setting")]
+	private class PatchQueenCharacter
+	{
+		private class Entry
+		{
+			public string Name;
+			public string Ability;
+		}
+
+		private static void Prefix(DB_Mgr __instance)
+		{
+			LogForHarmony.LogInfo("[QueenCharacter] Patching...");
+
+			var db = __instance.m_QueenCharacter_DB;
+			if (db == null)
+			{
+				LogForHarmony.LogError("[QueenCharacter] __instance.m_QueenCharacter_DB == null");
+				return;
+			}
+
+			if (!File.Exists(FilePathQueenCharacter))
+			{
+				try
+				{
+					var sheet = db.sheets[0];
+
+					var fileContent = sheet.list
+						.Where(item => item.Enable != 0)
+						.Select(item => new Entry
+						{
+							Name = item.Name,
+							Ability = item.Ability,
+						})
+						.ToList();
+					var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+
+					File.WriteAllText(FilePathQueenCharacter, jsonContent);
+					LogForHarmony.LogInfo("[QueenCharacter] Bump File Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[QueenCharacter] Bump File Failed: {e}");
+				}
+			}
+			else
+			{
+				try
+				{
+					var jsonContent = File.ReadAllText(FilePathQueenCharacter);
+					var fileContent = JsonConvert.DeserializeObject<List<Entry>>(jsonContent);
+
+					var sheet = db.sheets[0];
+
+					foreach (var entry in fileContent)
+					{
+						var item = sheet.list.Find(item => item.Name == entry.Name);
+						if (item == null)
+						{
+							LogForHarmony.LogWarning($"[QueenCharacter] Patch Failed: item {entry.Name} not found");
+							continue;
+						}
+
+						if (item.Enable == 0)
+						{
+							LogForHarmony.LogInfo($"[QueenCharacter] Patch Skipped: item {entry.Name} not enabled");
+							continue;
+						}
+
+						if (item.Ability == entry.Ability)
+						{
+							LogForHarmony.LogInfo(
+								$"[QueenCharacter] Patch Skipped: item [{entry.Name}] not changed({entry.Ability})"
+							);
+							continue;
+						}
+
+						LogForHarmony.LogInfo(
+							$"[QueenCharacter]\n" +
+							$"{entry.Name}: " +
+							$"\n\tAbility: [{item.Ability}] ==> [{entry.Ability}]"
+						);
+
+						item.Ability = entry.Ability;
+					}
+
+					LogForHarmony.LogInfo("[QueenCharacter] Patch Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[QueenCharacter] Patch Failed: {e}");
+				}
+			}
+		}
+	}
 
 	[HarmonyPatch(typeof(DB_Mgr), "Prosperity_DB_Setting")]
 	private class PatchProsperity
@@ -454,44 +343,6 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 			catch (Exception e)
 	// 			{
 	// 				LogForHarmony.LogError($"Write Building Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "Character_DB_Setting")]
-	// private class PatchCharacter
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchCharacter...");
-	//
-	// 		var db = __instance.m_CharacterDB;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_CharacterDB == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathCharacter))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list1 = db.List_Char1_DB;
-	// 				var list2 = db.List_Char2_DB;
-	// 				var data = new { list1, list2, };
-	// 				var content = JsonConvert.SerializeObject(data, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathCharacter, content);
-	// 				LogForHarmony.LogInfo("Write Character Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Character Failed: {e}");
 	// 			}
 	// 		}
 	// 		else
