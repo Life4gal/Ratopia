@@ -15,12 +15,12 @@ public class RatopiaPlugin : BaseUnityPlugin
 	private static readonly string PluginFolder = Path.Combine(Paths.PluginPath, "Ratopia");
 
 	private static readonly string FilePathQueenCharacter = Path.Combine(PluginFolder, "QueenCharacter.json");
-
 	private static readonly string FilePathProsperity = Path.Combine(PluginFolder, "Prosperity.json");
 
 	// private static readonly string FilePathResource = Path.Combine(PluginFolder, "Resource.json");
 	// private static readonly string FilePathPlant = Path.Combine(PluginFolder, "Plant.json");
-	// private static readonly string FilePathBuilding = Path.Combine(PluginFolder, "Building.json");
+	private static readonly string FilePathBuilding = Path.Combine(PluginFolder, "Building.json");
+
 	private static readonly string FilePathItem = Path.Combine(PluginFolder, "Item.json");
 	// private static readonly string FilePathRatron = Path.Combine(PluginFolder, "Ratron.json");
 	// private static readonly string FilePathRecipe = Path.Combine(PluginFolder, "Recipe.json");
@@ -315,42 +315,161 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 	}
 	// }
 
-	// [HarmonyPatch(typeof(DB_Mgr), "Build_DB_Setting")]
-	// private class PatchBuilding
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchBuilding...");
-	//
-	// 		var db = __instance.m_Building_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Building_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathBuilding))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathBuilding, content);
-	// 				LogForHarmony.LogInfo("Write Building Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Building Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
+	[HarmonyPatch(typeof(DB_Mgr), "Build_DB_Setting")]
+	private class PatchBuilding
+	{
+		private class Entry
+		{
+			public string Name;
+			public int Width;
+			public int Height;
+			public int HP;
+			public int Cost;
+			public int ElecCost;
+			public int Payment;
+			public string Material;
+			public string Product;
+		}
+
+		private static bool IsProductionBuilding(Building_DB1.Param item)
+		{
+			return item.Category == 3;
+		}
+
+		private static string ProductOfBuilding(Building_DB1.Param item)
+		{
+			return IsProductionBuilding(item)
+				? item.Effect_Value3
+				: "This building is not a production facility, so it cannot create products.(Any settings will be ignored)";
+		}
+
+		private static void SetProductOfBuilding(Building_DB1.Param item, string production)
+		{
+			if (IsProductionBuilding(item))
+			{
+				item.Effect_Value3 = production;
+			}
+		}
+
+		private static void Prefix(DB_Mgr __instance)
+		{
+			LogForHarmony.LogInfo("[Building] Patching...");
+
+			var db = __instance.m_Building_DB1;
+			if (db == null)
+			{
+				LogForHarmony.LogError("[Building] __instance.m_Building_DB1 == null");
+				return;
+			}
+
+			if (!File.Exists(FilePathBuilding))
+			{
+				try
+				{
+					var sheet = db.sheets[0];
+
+					var fileContent = sheet.list
+						.Where(item => item.Enable != 0)
+						.Select(item => new Entry
+						{
+							Name = item.Name,
+							Width = item.Width,
+							Height = item.Height,
+							HP = item.HP,
+							Cost = item.Cost,
+							ElecCost = item.ElecCost,
+							Payment = item.Payment,
+							Material = item.Material,
+							Product = ProductOfBuilding(item)
+						})
+						.ToList();
+					var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+
+					File.WriteAllText(FilePathBuilding, jsonContent);
+					LogForHarmony.LogInfo("[Building] Bump File Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[Building] Bump File Failed: {e}");
+				}
+			}
+			else
+			{
+				try
+				{
+					var jsonContent = File.ReadAllText(FilePathBuilding);
+					var fileContent = JsonConvert.DeserializeObject<List<Entry>>(jsonContent);
+
+					var sheet = db.sheets[0];
+
+					foreach (var entry in fileContent)
+					{
+						var item = sheet.list.Find(item => item.Name == entry.Name);
+						if (item == null)
+						{
+							LogForHarmony.LogWarning($"[Building] Patch Failed: item {entry.Name} not found");
+							continue;
+						}
+
+						if (item.Enable == 0)
+						{
+							LogForHarmony.LogInfo($"[Building] Patch Skipped: item {entry.Name} not enabled");
+							continue;
+						}
+
+						if (
+							item.Width == entry.Width &&
+							item.Height == entry.Height &&
+							item.HP == entry.HP &&
+							item.Cost == entry.Cost &&
+							item.ElecCost == entry.ElecCost &&
+							item.Payment == entry.Payment &&
+							item.Material == entry.Material &&
+							(!IsProductionBuilding(item) || ProductOfBuilding(item) == entry.Product)
+						)
+						{
+							LogForHarmony.LogInfo(
+								$"[Building] Patch Skipped: item [{entry.Name}] not changed"
+							);
+							continue;
+						}
+
+						var log =
+							$"[Building]\n" +
+							$"{entry.Name}: " +
+							$"\n\tWidth: [{item.Width}] ==> [{entry.Width}]" +
+							$"\n\tHeight: [{item.Height}] ==> [{entry.Height}]" +
+							$"\n\tHP: [{item.HP}] ==> [{entry.HP}]" +
+							$"\n\tCost: [{item.Cost}] ==> [{entry.Cost}]" +
+							$"\n\tElecCost: [{item.ElecCost}] ==> [{entry.ElecCost}]" +
+							$"\n\tPayment: [{item.Payment}] ==> [{entry.Payment}]" +
+							$"\n\tMaterial: [{item.Material}] ==> [{entry.Material}]";
+						if (IsProductionBuilding(item))
+						{
+							log += $"\n\tProduct: [{ProductOfBuilding(item)}] ==> [{entry.Product}]";
+						}
+
+						LogForHarmony.LogInfo(log);
+
+						item.Width = entry.Width;
+						item.Height = entry.Height;
+						item.HP = entry.HP;
+						item.Cost = entry.Cost;
+						item.ElecCost = entry.ElecCost;
+						item.Payment = entry.Payment;
+						item.Material = entry.Material;
+						SetProductOfBuilding(item, entry.Product);
+					}
+
+					LogForHarmony.LogInfo("[Building] Patch Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[Building] Patch Failed: {e}");
+				}
+			}
+		}
+	}
 
 	// Config/Item.txt
 	[HarmonyPatch(typeof(DB_Mgr), "Item_DB_Setting")]

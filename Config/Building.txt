@@ -1,0 +1,11 @@
+建筑物
+
+Name: 建筑名称
+Width: 建筑宽度(不影响贴图大小)
+Height: 建筑高度(不影响贴图大小)
+HP: 建筑生命值
+Cost: 建造花费
+ElecCost: 电力花费
+Payment: 工资(一般是兵营这种驻守建筑)
+Material: 建造材料
+Effect_Value3: 产品(如果是生产建筑/Category==3)
