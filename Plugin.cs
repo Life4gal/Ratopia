@@ -15,24 +15,14 @@ public class RatopiaPlugin : BaseUnityPlugin
 	private static readonly string PluginFolder = Path.Combine(Paths.PluginPath, "Ratopia");
 
 	// private static readonly string FilePathQueenCharacter = Path.Combine(PluginFolder, "QueenCharacter.json");
-	// private static readonly string FilePathProsperity = Path.Combine(PluginFolder, "Prosperity.json");
+	private static readonly string FilePathProsperity = Path.Combine(PluginFolder, "Prosperity.json");
 	// private static readonly string FilePathResource = Path.Combine(PluginFolder, "Resource.json");
 	// private static readonly string FilePathPlant = Path.Combine(PluginFolder, "Plant.json");
 	// private static readonly string FilePathBuilding = Path.Combine(PluginFolder, "Building.json");
-	// private static readonly string FilePathAbility = Path.Combine(PluginFolder, "Ability.json");
-	// private static readonly string FilePathTech = Path.Combine(PluginFolder, "Tech.json");
-	// private static readonly string FilePathTechScientist = Path.Combine(PluginFolder, "TechScientist.json");
 	// private static readonly string FilePathCharacter = Path.Combine(PluginFolder, "Character.json");
-	// private static readonly string FilePathRatronCharacter = Path.Combine(PluginFolder, "RatronCharacter.json");
-	// private static readonly string FilePathRandomEvent = Path.Combine(PluginFolder, "RandomEvent.json");
 	private static readonly string FilePathItem = Path.Combine(PluginFolder, "Item.json");
-	// private static readonly string FilePathLevel = Path.Combine(PluginFolder, "Level.json");
-	// private static readonly string FilePathDungeon = Path.Combine(PluginFolder, "Dungeon.json");
 	// private static readonly string FilePathRatron = Path.Combine(PluginFolder, "Ratron.json");
 	// private static readonly string FilePathRecipe = Path.Combine(PluginFolder, "Recipe.json");
-	// private static readonly string FilePathEarthRat = Path.Combine(PluginFolder, "EarthRat.json");
-	// private static readonly string FilePathAlternative = Path.Combine(PluginFolder, "Alternative.json");
-
 
 	private void Awake()
 	{
@@ -257,42 +247,110 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 	}
 	// }
 
-	// [HarmonyPatch(typeof(DB_Mgr), "Prosperity_DB_Setting")]
-	// private class PatchProsperity
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchProsperity...");
-	//
-	// 		var db = __instance.m_Prosperity_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Prosperity_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathProsperity))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathProsperity, content);
-	// 				LogForHarmony.LogInfo("Write Prosperity Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Prosperity Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
+	[HarmonyPatch(typeof(DB_Mgr), "Prosperity_DB_Setting")]
+	private class PatchProsperity
+	{
+		private class Entry
+		{
+			public string Name;
+			public int NeedValue;
+			public int Pop;
+			public int CitizenAbilityValue;
+			public int PolicyNum;
+		}
+
+		private static void Prefix(DB_Mgr __instance)
+		{
+			LogForHarmony.LogInfo("[Prosperity] Patching...");
+
+			var db = __instance.m_Prosperity_DB1;
+			if (db == null)
+			{
+				LogForHarmony.LogError("[Prosperity] __instance.m_Item_DB1 == null");
+				return;
+			}
+
+			if (!File.Exists(FilePathProsperity))
+			{
+				try
+				{
+					var sheet = db.sheets[0];
+
+					var fileContent = sheet.list
+						.Select(item => new Entry
+						{
+							Name = item.Name,
+							NeedValue = item.NeedValue,
+							Pop = item.Pop,
+							CitizenAbilityValue = item.CitizenAbilityValue,
+							PolicyNum = item.PolicyNum,
+						})
+						.ToList();
+					var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+
+					File.WriteAllText(FilePathProsperity, jsonContent);
+					LogForHarmony.LogInfo("[Prosperity] Bump File Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[Prosperity] Bump File Failed: {e}");
+				}
+			}
+			else
+			{
+				try
+				{
+					var jsonContent = File.ReadAllText(FilePathProsperity);
+					var fileContent = JsonConvert.DeserializeObject<List<Entry>>(jsonContent);
+
+					var sheet = db.sheets[0];
+
+					foreach (var entry in fileContent)
+					{
+						var item = sheet.list.Find(item => item.Name == entry.Name);
+						if (item == null)
+						{
+							LogForHarmony.LogWarning($"[Prosperity] Patch Failed: item {entry.Name} not found");
+							continue;
+						}
+
+						if (
+							item.NeedValue == entry.NeedValue &&
+							item.Pop == entry.PolicyNum &&
+							item.CitizenAbilityValue == entry.CitizenAbilityValue &&
+							item.PolicyNum == entry.PolicyNum
+						)
+						{
+							LogForHarmony.LogInfo(
+								$"[Prosperity] Patch Skipped: item [{entry.Name}] not changed"
+							);
+							continue;
+						}
+
+						LogForHarmony.LogInfo(
+							$"[Prosperity]\n" +
+							$"{entry.Name}: " +
+							$"\n\tNeedValue: [{item.NeedValue}] ==> [{entry.NeedValue}]" +
+							$"\n\tPop: [{item.Pop}] ==> [{entry.Pop}]" +
+							$"\n\tCitizenAbilityValue: [{item.CitizenAbilityValue}] ==> [{entry.CitizenAbilityValue}]" +
+							$"\n\tPolicyNum: [{item.PolicyNum}] ==> [{entry.PolicyNum}]"
+						);
+
+						item.NeedValue = entry.NeedValue;
+						item.Pop = entry.Pop;
+						item.CitizenAbilityValue = entry.CitizenAbilityValue;
+						item.PolicyNum = entry.PolicyNum;
+					}
+
+					LogForHarmony.LogInfo("[Prosperity] Patch Succeed");
+				}
+				catch (Exception e)
+				{
+					LogForHarmony.LogError($"[Prosperity] Patch Failed: {e}");
+				}
+			}
+		}
+	}
 
 	// [HarmonyPatch(typeof(DB_Mgr), "Res_DB_Setting")]
 	// private class PatchResource
@@ -405,150 +463,6 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 	}
 	// }
 
-	// [HarmonyPatch(typeof(DB_Mgr), "Ability_DB_Setting")]
-	// private class PatchAbility
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchAbility...");
-	//
-	// 		var db = __instance.m_AbilityDB;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_AbilityDB == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathAbility))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db._list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathAbility, content);
-	// 				LogForHarmony.LogInfo("Write Ability Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Ability Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "Tech_DB_Setting")]
-	// private class PatchTech
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchTech...");
-	//
-	// 		var db = __instance.m_Tech_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Tech_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathTech))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db.sheets;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathTech, content);
-	// 				LogForHarmony.LogInfo("Write Tech Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Tech Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "TechScientist_DB_Setting")]
-	// private class PatchTechScientist
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchTechScientist...");
-	//
-	// 		var db = __instance.m_ScientistTech_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_ScientistTech_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathTechScientist))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db.sheets;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathTechScientist, content);
-	// 				LogForHarmony.LogInfo("Write TechScientist Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write TechScientist Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "TechMagician_DB_Setting")]
-	// private class PatchTechMagician
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchTechMagician...");
-	//
-	// 		var db = __instance.m_MagicianTech_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_MagicianTech_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathTechScientist))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db.sheets;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathTechScientist, content);
-	// 				LogForHarmony.LogInfo("Write TechMagician Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write TechMagician Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
 	// [HarmonyPatch(typeof(DB_Mgr), "Character_DB_Setting")]
 	// private class PatchCharacter
 	// {
@@ -578,79 +492,6 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 			catch (Exception e)
 	// 			{
 	// 				LogForHarmony.LogError($"Write Character Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "RatronCharacter_DB_Setting")]
-	// private class PatchRatronCharacter
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchRatronCharacter...");
-	//
-	// 		var db = __instance.m_RatronCharacter_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_RatronCharacter_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathRatronCharacter))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db.sheets;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathRatronCharacter, content);
-	// 				LogForHarmony.LogInfo("Write RatronCharacter Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write RatronCharacter Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "RandEvent_DB_Setting")]
-	// private class PatchRandomEvent
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchRandomEvent...");
-	//
-	// 		var db = __instance.m_RandomEvent_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_RandomEvent_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathRandomEvent))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathRandomEvent, content);
-	// 				LogForHarmony.LogInfo("Write RandomEvent Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write RandomEvent Failed: {e}");
 	// 			}
 	// 		}
 	// 		else
@@ -798,80 +639,6 @@ public class RatopiaPlugin : BaseUnityPlugin
 		}
 	}
 
-	// [HarmonyPatch(typeof(DB_Mgr), "Level_DB_Setting")]
-	// private class PatchLevel
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchLevel...");
-	//
-	// 		var db = __instance.m_Level_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Level_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathLevel))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathLevel, content);
-	// 				LogForHarmony.LogInfo("Write Level Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Level Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "Dungeon_DB_Setting")]
-	// private class PatchDungeon
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchDungeon...");
-	//
-	// 		var db = __instance.m_Dungeon_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Dungeon_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathDungeon))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathDungeon, content);
-	// 				LogForHarmony.LogInfo("Write Dungeon Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Dungeon Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
 	// [HarmonyPatch(typeof(DB_Mgr), "Ratron_DB_Setting")]
 	// private class PatchRatron
 	// {
@@ -942,79 +709,6 @@ public class RatopiaPlugin : BaseUnityPlugin
 	// 			catch (Exception e)
 	// 			{
 	// 				LogForHarmony.LogError($"Write Recipe Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "Earthrat_DB_Setting")]
-	// private class PatchEarthRat
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchEarthRat...");
-	//
-	// 		var db = __instance.m_Earthrat_DB1;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_Earthrat_DB1 == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathEarthRat))
-	// 		{
-	// 			try
-	// 			{
-	// 				var sheet = db.sheets[0];
-	// 				var list = sheet.list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathEarthRat, content);
-	// 				LogForHarmony.LogInfo("Write EarthRat Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write EarthRat Failed: {e}");
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			//
-	// 		}
-	// 	}
-	// }
-
-	// [HarmonyPatch(typeof(DB_Mgr), "Atler_DB_Setting")]
-	// private class PatchAlternative
-	// {
-	// 	private static void Prefix(DB_Mgr __instance)
-	// 	{
-	// 		LogForHarmony.LogInfo("PatchAlternative...");
-	//
-	// 		var db = __instance.m_AlterDB;
-	// 		if (db == null)
-	// 		{
-	// 			LogForHarmony.LogError("__instance.m_AlterDB == null");
-	// 			return;
-	// 		}
-	//
-	// 		if (!File.Exists(FilePathAlternative))
-	// 		{
-	// 			try
-	// 			{
-	// 				var list = db._list;
-	// 				var content = JsonConvert.SerializeObject(list, Formatting.Indented);
-	//
-	// 				File.WriteAllText(FilePathAlternative, content);
-	// 				LogForHarmony.LogInfo("Write Alternative Succeed");
-	// 			}
-	// 			catch (Exception e)
-	// 			{
-	// 				LogForHarmony.LogError($"Write Alternative Failed: {e}");
 	// 			}
 	// 		}
 	// 		else
