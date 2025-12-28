@@ -133,7 +133,7 @@ public class DatabaseBuilding
 		//
 		// Effect_Value1 生效
 		// 仓库(Storage): 提供40格容量
-		//     "AbilityCode_A": "Store"
+		//     "AbilityCode_A": "Store" ==> BuildAbility.Store
 		//     "AbilityCode_B": "-"
 		//     "AbilityCode_C": "-"
 		//     "Effect_Value1": "P40" ==> 40格容量
@@ -157,7 +157,7 @@ public class DatabaseBuilding
 		// 
 		// Effect_Value1 + Effect_Value2  生效
 		// 床(House): 生命值恢复+1,行动力恢复速度+100%
-		//     "AbilityCode_A": "House"
+		//     "AbilityCode_A": "House" ==> BuildAbility.House
 		//     "AbilityCode_B": "Fatigue"
 		//     "AbilityCode_C": "-"
 		//     "Effect_Value1": "P100" ==> 行动力恢复速度+100%
@@ -179,7 +179,7 @@ public class DatabaseBuilding
 		// Effect_Value1 + Effect_Value2  + Effect_Value3 生效
 		// 其中带(!)的支持Effect_Value3为列表(Helpers.StringToEnum<TileType>(value)),而不是PN
 		// 学校(School): 价格25, 需要工具x1, 提供10乐趣,智力+3
-		//     "AbilityCode_A": "Atelier" ==> 服务建筑
+		//     "AbilityCode_A": "Atelier" ==> BuildAbility.Atelier
 		//     "AbilityCode_B": "Fun" ==> 提供乐趣
 		//     "AbilityCode_C": "-"
 		//     "Effect_Value1": "P25" ==> 价格25
@@ -187,7 +187,7 @@ public class DatabaseBuilding
 		//     "Effect_Value3": "Tool(1)" ==> 需要工具x1
 		//     "Effect_Ability": "INT(3)" ==> 智力+3
 		// 酒馆(Pub): 价格35,需要啤酒x1,提供30乐趣,食物+20,乐趣消耗速度-10%
-		//     "AbilityCode_A": "Atelier" ==> 服务建筑
+		//     "AbilityCode_A": "Atelier" ==> BuildAbility.Atelier
 		//     "AbilityCode_B": "Fun" ==> 提供乐趣
 		//     "AbilityCode_C": "-"
 		//     "Effect_Value1": "P35" ==> 价格25
