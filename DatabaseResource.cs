@@ -157,7 +157,7 @@ public class DatabaseResource
 						RecipeA = new Entry.Recipe
 							{ Material = item.Material_A, Quantity = item.Product_A, Workload = item.BP_A },
 						RecipeB = new Entry.Recipe
-							{ Material = item.Material_B, Quantity = item.Product_B, Workload = item.BP_A },
+							{ Material = item.Material_B, Quantity = item.Product_B, Workload = item.BP_B },
 						RecipeC = new Entry.Recipe
 							{ Material = item.Material_C, Quantity = item.Product_C, Workload = item.BP_C }
 					})
