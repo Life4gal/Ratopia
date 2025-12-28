@@ -1,0 +1,829 @@
+public static readonly int Map_MaxSize_Y = 256 /*0x0100*/;
+public static readonly int Map_MaxSize_X = 256 /*0x0100*/;
+public static readonly int TileSize = 100;
+public static readonly int MaskSize = 50;
+public static readonly int TileLength = 4;
+public static readonly float Tile_Ratio = 1f;
+public static readonly int TileStandardSize = 4;
+public static readonly float TileSpr_Zpos = -0.0003f;
+public static readonly float Time_WaterDelta = 0.75f;
+public static readonly float Time_24Hour = 288f;
+public static readonly int TileObject_LimitMinute = 8640;
+public static readonly int Time_ZombieDieHunger = 24;
+public static readonly int Time_WeaselBack = 12;
+public static readonly int BodyDirtHour = 576;
+public static readonly float FatigueCut = 30f;
+public static readonly float HungerCut = 65f;
+public static readonly float FunCut = 55f;
+public static readonly float CleanCut = 55f;
+public static readonly int GoldCut = 3000;
+public static readonly int CitizenGoldCut = 30;
+public static readonly int MinCalculateHappyCitizenCount = 10;
+public static readonly int DayOfYear = 48 /*0x30*/;
+public static readonly int DayOfWeek = 7;
+public static readonly int DayOfQuarter = 12;
+public static readonly int MinuteOfHour = 60;
+public static readonly int HourOfDay = 24;
+public static readonly float MinuteOfDay = 1440f;
+public static readonly int RandLoopEventCoolTime = 48 /*0x30*/;
+public static readonly float Grade2GoldCut = 500f;
+public static readonly float Grade2LifeCut = 20f;
+public static readonly float Grade3GoldCut = 3000f;
+public static readonly float Grade3LifeCut = 46f;
+public static readonly int Grade1ProsperityValue = 300;
+public static readonly int Grade2ProsperityValue = 1000;
+public static readonly int Grade3ProsperityValue = 3000;
+public static readonly float FatigueMinimum = 1f;
+public static readonly float FatigueTick = 0.25f;
+public static readonly float HungerTick = 0.1f;
+public static readonly float FunTick = 0.1f;
+public static readonly float CleanTick = 0.1f;
+public static int m_WaterType = 0;
+public static readonly float[] m_DrownTime = new float[4]
+{
+6f,
+0.06f,
+3f,
+0.3f
+};
+public static readonly float DefaultCamSize = 6.2f;
+public static readonly float m_DurabilityTick = 20f;
+public static readonly int m_MaxCustomBuildingRange = 40;
+public static readonly int m_MaxBatteryRange = 20;
+public static readonly int m_MaxSummonRange = 10;
+public static readonly int m_ResearchTime = 180;
+public static readonly float TheftDamage = -10f;
+public static readonly int Minimum_Capacity = 2;
+public static readonly float DrownDmg = -5f;
+public static readonly int DiseaseLv1_Time = 12;
+public static readonly int DiseaseLv2_Time = 24;
+public static readonly int DiseaseLv3_Time = 24;
+public static readonly int DiseasePrevention_Time = 24;
+public static readonly int Maximum_ProductCondition = 20;
+public static readonly int Maximum_CitizenCondition = 5;
+public static readonly int Maximum_Dodge = 90;
+public static readonly float m_ServiceWorkExp = 3f;
+public static readonly int m_LizardAreaMax = 12;
+public static readonly int m_BluePrintMax = 200;
+public static readonly int m_LizardAgainTerm = 48 /*0x30*/;
+public static readonly int m_SoulConsumeLabor = 10;
+public static readonly int m_Weasel_ThemaPoint = 100000;
+public static readonly int m_Lizard_ThemaPoint = 250000;
+public static readonly float Mining_FixValue = 10f;
+public static float Mining_LaborValue = 1f;
+public static float Mining_LaborValueOrigin = 1f;
+public static float Gathering_LaborValue = 1f;
+public static float Gathering_LaborValueOrigin = 1f;
+public static readonly float Sense_FlyAnimal = 4.5f;
+public static readonly float Sense_Enemy_C = 12f;
+public static readonly float Sense_Enemy_S = 90f;
+public static readonly float Sense_Enemy_S_Short = 7f;
+public static readonly float Job_Range = 40f;
+public static readonly float MapObj_ActRange = 25f;
+public static readonly float Animal_ActRange = 60f;
+public static readonly float EffectCamRange = 30f;
+public static readonly int Time_Religion = 48 /*0x30*/;
+public static readonly int Time_Children = 12;
+public static readonly int PrisonTime = 2;
+public static readonly int CriminalPercent = 5;
+public static readonly int FeatherScarabCoolTime = 9;
+public static readonly int MaxWebNum = 50;
+public static readonly int FloodMinimumHeight = 5;
+public static readonly int CarrierLimit = 5;
+public static readonly int DiseaseLv1Cut = 50;
+public static int DiseaseLv2Per = 50;
+public static int DiseaseLv3Per = 50;
+public static readonly int ContaminantsNum = 20;
+public static readonly float PDI_Term = 200f;
+public static readonly float PDI_LevelPerWorkEffect = 0.05f;
+public static readonly float PDI_LevelPerSpeedEffect = 0.03f;
+public static readonly float PDI_LevelPerServiceEffect = 0.05f;
+public static readonly bool GizmoEnable = true;
+public static bool IsCitizenWanderOK = true;
+public static bool IsCitizenRebellionOK = true;
+public static bool IsAlmostDevil = false;
+public static bool Cheat = false;
+public static bool IsPublicVersion = true;
+private static bool _IsCursorActivate = true;
+public static bool IsMouseTargetOn = false;
+public static int m_IndexMaker = -9000000;
+public static readonly string Str_NumFormat_Digit = "{0:#,##0}";
+public static readonly string Str_NumFormat1 = "{0:#,##0.#}";
+public static readonly string Str_CitizenBodyName = "BF_CitizenBody";
+public static readonly string Layer_Default = "Default";
+public static readonly string Layer_GrayScale = "None_GrayScale";
+public static readonly string Layer_HighlightChannel = "Highlight_Channel";
+public static readonly string LayerMask_Focus = "Focus";
+public static readonly string LayerMask_Unit = "Unit";
+public static readonly string LayerMask_Building = "Building";
+public static readonly string Str_Dazzle = "Dazzle";
+public static readonly string Str_JobPassive = "JobPassive";
+public static readonly string Str_MillitaryPassive = "MilitaryPassive";
+public static readonly string Str_NoMoney = "NoMoney";
+public static readonly string Str_RebX = "Rebellion_X";
+public static readonly string Str_DevilTemp = "DevilTemptation";
+public static readonly string Str_Hope = "Hope";
+public static readonly string Str_SunHope = "SunHope";
+public static readonly string Str_SunPowerHope = "SunPowerHope";
+public static readonly string Str_DarkIntHope = "DarkIntHope";
+public static readonly string Str_CCTV = "CCTV";
+public static readonly string Str_ProtectJob = "ProtectJob";
+public static readonly string Str_MiniGame = "MiniGame";
+public static readonly string Str_AssembleBuff = "AssembleBuff";
+public static readonly string Str_LizardThreat = "LizardThreat";
+public static readonly string Str_LostJob = "LostJob";
+public static readonly string Str_Poisoned = "Poisoned";
+public static readonly string Str_MagicianGraveBuff = "MagicianBuff";
+public static readonly string Str_QueenCallPos = "QueenCallPos";
+public static readonly string Str_SpiderWeb = "SpiderWeb";
+public static readonly string Str_FoodCourse = "FoodCourse";
+public static readonly string Str_ProsReward = "ProsReward";
+public static readonly string Str_NobleHappy = "NobleHappy";
+public static readonly string Str_AllianceHappy = "AllianceHappy";
+public static readonly string Str_DependencyHappy = "DependencyHappy";
+public static readonly string Str_LizardHomeHappy = "LizardHomeHappy";
+public static readonly string Str_DiseaseLv1 = "DiseaseLv1";
+public static readonly string Str_DiseaseLv2 = "DiseaseLv2";
+public static readonly string Str_DiseaseLv3 = "DiseaseLv3";
+public static readonly string Str_DiseasePrevention = "DiseasePrevention";
+public static readonly string Str_DarkReligion = "DarkReligion";
+public static readonly string Str_SunReligion = "SunReligion";
+public static readonly string Str_SunTotem = "SunTotem";
+public static readonly string Str_Wedding = "Wedding";
+public static readonly string Str_NoReligionHappy = "NoReligionHappy";
+public static readonly string Str_DarkReligionHappy = "DarkReligionHappy";
+public static readonly string Str_SunReligionHappy = "SunReligionHappy";
+public static readonly string Str_QueenMate = "QueenMate";
+public static readonly string Str_CustomBuff = "CustomBuff";
+public static readonly string Str_FirecrackerBuff = "Firecracker";
+public static readonly string Str_PBuff_PlantCare = "PlantCare";
+public static readonly string Str_PBuff_GardenSpeed = "GardenSpeed";
+public static readonly string Str_PBuff_Sprinkler = "SprinklerBuff";
+public static readonly string Str_PBuff_HeatSystem = "HeatSystem";
+public static readonly string Str_Mercenary_CountryName = "Mercenary";
+public static readonly string Str_Mask3 = "Mask3";
+public static readonly string Str_LeftUpRight = "LeftUpRight";
+public static readonly string Str_UpBottom = "UpBottom";
+public static readonly string Str_Edge = nameof (Edge);
+public static readonly string Str_Edge2 = "Edge2";
+public static readonly string Str_Edge3 = "Edge3";
+public static readonly string Str_Edge4 = "Edge4";
+public static readonly string Str_Edge6 = "Edge6";
+public static readonly string Str_Edge7 = "Edge7";
+public static readonly string Str_Edge8 = "Edge8";
+public static readonly string Str_Water = "Water";
+public static readonly string[] Mission_Name = new string[14]
+{
+"BasicConstruction",
+"CitizenCall",
+"BasicConstruction2",
+"CitizenRecruit",
+"Build_Monument",
+"TargetBoxMove",
+"MiningTuto",
+"LadderTuto",
+"GatherGrain",
+"MakeToilet",
+"CodeStoneBuild",
+"MakeDestTuto",
+"InvasionClear0",
+"GrowPros0"
+};
+public static readonly string[] TutoMapSeed = new string[4]
+{
+"18",
+"99",
+"68",
+"10"
+};
+public static readonly string Icon_Rebellion = "<sprite name=FS_Torch>";
+public static readonly string Icon_CitizenRebellion = "<sprite name=FS_CitizenRebellion>";
+public static readonly string Icon_Timer = "<sprite name=FS_Timer>";
+public static readonly string Icon_Duration = "<sprite name=FS_Duration>";
+public static readonly string Icon_Mercenary = "<sprite name=FS_Mercenary>";
+public static readonly string Icon_Trade = "<sprite name=FS_Trade>";
+public static readonly string Icon_Explore = "<sprite name=FS_Exploration>";
+public static readonly string Icon_BoneMedal = "<sprite name=FS_BoneMedal>";
+public static readonly string Icon_CoolTime = "<sprite name=FS_CoolTime>";
+public static readonly string Icon_BuildRange = "<sprite name=FS_BuildRange>";
+public static readonly string Icon_Blueprint = "<sprite name=FS_Blueprint>";
+public static readonly string Icon_Citizen = "<sprite name=FS_Citizen>";
+public static readonly string Icon_CitizenLevel = "<sprite name=FS_ImmigrantsLevel>";
+public static readonly string Icon_WaveLevel = "<sprite name=FS_Level>";
+public static readonly string Icon_Combat = "<sprite name=FS_CitizenCombat>";
+public static readonly string Icon_Labor = "<sprite name=FS_Labor>";
+public static readonly string Icon_Fatigue = "<sprite name=FS_Stamina>";
+public static readonly string Icon_FatigueTime = "<sprite name=FS_FatigueTime>";
+public static readonly string Icon_Clean = "<sprite name=FS_Cleanliness>";
+public static readonly string Icon_CleanTime = "<sprite name=FS_CleanTime>";
+public static readonly string Icon_Fun = "<sprite name=FS_Fun>";
+public static readonly string Icon_FunTime = "<sprite name=FS_FunTime>";
+public static readonly string Icon_Gold = "<sprite name=FS_Gold>";
+public static readonly string Icon_GBot = "<sprite name=FS_GBot>";
+public static readonly string Icon_Tax = "<sprite name=FS_Tax>";
+public static readonly string Icon_Present = "<sprite name=FS_Present>";
+public static readonly string Icon_TaxByProperty = "<sprite name=FS_TaxByProperty>";
+public static readonly string Icon_Dependency = "<sprite name=FS_Dependency>";
+public static readonly string Icon_MiniGold = "<sprite name=FS_MiniGold>";
+public static readonly string Icon_Food = "<sprite name=FS_Food>";
+public static readonly string Icon_Food2 = "<sprite name=FS_Food2>";
+public static readonly string Icon_FoodTime = "<sprite name=FS_HungerTime>";
+public static readonly string Icon_Life = "<sprite name=FS_Life>";
+public static readonly string Icon_LifeTime = "<sprite name=FS_LifeTime>";
+public static readonly string Icon_Happy = "<sprite name=FS_Happiness>";
+public static readonly string Icon_Hope = "<sprite name=FS_Hope>";
+public static readonly string Icon_SunHope = "<sprite name=FS_SunHope>";
+public static readonly string Icon_SunPowerHope = "<sprite name=FS_SunPowerHope>";
+public static readonly string Icon_DarkIntHope = "<sprite name=FS_DarkIntHope>";
+public static readonly string Icon_GoldProperty = "<sprite name=FS_Property>";
+public static readonly string Icon_TaxLaw = "<sprite name=FS_TaxLaw>";
+public static readonly string Icon_ComTaxLaw = "<sprite name=FS_Scroll_Trade>";
+public static readonly string Icon_WelTaxLaw = "<sprite name=FS_WelfareLaw>";
+public static readonly string Icon_LaborTaxLaw = "<sprite name=FS_LaborLaw>";
+public static readonly string Icon_UnHappy = "<sprite name=FS_CitizenUnHappy>";
+public static readonly string Icon_AllDir = "<sprite name=AllDir>";
+public static readonly string Icon_Alliance = "<sprite name=FS_DefenceMode>";
+public static readonly string Icon_Alarm = "<sprite name=FS_Alarm>";
+public static readonly string Icon_Resource = "<sprite name=FS_BuildResource>";
+public static readonly string Icon_MoneyCure = "<sprite name=FS_MoneyCure>";
+public static readonly string Icon_Base = "<sprite name=FS_Base>";
+public static readonly string Icon_RawMat = "<sprite name=FS_RawMaterials>";
+public static readonly string Icon_Service = "<sprite name=FS_Service>";
+public static readonly string Icon_Product = "<sprite name=FS_Production>";
+public static readonly string Icon_Gathering = "<sprite name=FS_Gathering>";
+public static readonly string Icon_PlantManaging = "<sprite name=FS_PlantManaging>";
+public static readonly string Icon_PlantCare = "<sprite name=FS_PlantCare>";
+public static readonly string Icon_Garden = "<sprite name=FS_Garden>";
+public static readonly string Icon_PlusMat = "<sprite name=FS_PlusMat>";
+public static readonly string Icon_CrimePer = "<sprite name=FS_CrimePer>";
+public static readonly string Icon_RangeAtk = "<sprite name=FS_RangeAttack>";
+public static readonly string Icon_Military = "<sprite name=FS_Military>";
+public static readonly string Icon_NoMilitary = "<sprite name=FS_NoMilitary>";
+public static readonly string Icon_Deco = "<sprite name=FS_Decoration>";
+public static readonly string Icon_Queen = "<sprite name=FS_Queen>";
+public static readonly string Icon_Speed = "<sprite name=FS_Speed>";
+public static readonly string Icon_Poison = "<sprite name=FS_Poison>";
+public static readonly string Icon_Burn = "<sprite name=FS_Burn>";
+public static readonly string Icon_MakeSkull = "<sprite name=FS_MakeSkull>";
+public static readonly string Icon_Period = "<sprite name=FS_Period>";
+public static readonly string Icon_Dar = "<sprite name=FS_Dar>";
+public static readonly string Icon_Up_Green = "<sprite name=FS_P_Up_Green>";
+public static readonly string Icon_Down_Red = "<sprite name=FS_P_Down_Red>";
+public static readonly string Icon_Atk = "<sprite name=FS_ATK>";
+public static readonly string Icon_Hp = "<sprite name=FS_Health>";
+public static readonly string Icon_HpMax = "<sprite name=FS_HealthMax>";
+public static readonly string Icon_Weight = "<sprite name=FS_Weight>";
+public static readonly string Icon_Def = "<sprite name=FS_DEF>";
+public static readonly string Icon_ElecShield = "<sprite name=FS_ElecShield>";
+public static readonly string Icon_PlusSoul = "<sprite name=FS_Soul>";
+public static readonly string Icon_Deadbody = "<sprite name=FS_LookDeadbody>";
+public static readonly string Icon_DarkReligion = "<sprite name=FS_DarkReligionSymbol>";
+public static readonly string Icon_MassProduct = "<sprite name=FS_MassProduct>";
+public static readonly string Icon_AssembleBuff = "<sprite name=FS_AssembleBuff>";
+public static readonly string Icon_Productivity = "<sprite name=FS_Productivity>";
+public static readonly string Icon_Exp = "<sprite name=FS_Exp>";
+public static readonly string Icon_NoExp = "<sprite name=FS_NoExp>";
+public static readonly string Icon_Export = "<sprite name=FS_Export>";
+public static readonly string Icon_Import = "<sprite name=FS_Import>";
+public static readonly string Icon_QuestMark = "<sprite name=FS_QuestMark>";
+public static readonly string Icon_Death = "<sprite name=FS_Death>";
+public static readonly string Icon_Bell = "<sprite name=FS_Bell>";
+public static readonly string Icon_Mining = "<sprite name=FS_Mining>";
+public static readonly string Icon_Construct = "<sprite name=FS_Building>";
+public static readonly string Icon_Demolition = "<sprite name=FS_Demolition>";
+public static readonly string Icon_Repair = "<sprite name=FS_Repair>";
+public static readonly string Icon_Prosperity = "<sprite name=FS_Prosperity>";
+public static readonly string Icon_LoanProduct = "<sprite name=FS_LoanProduct>";
+public static readonly string Icon_NeedRat = "<sprite name=FS_NeedRat>";
+public static readonly string Icon_Exchange = "<sprite name=FS_Exchange>";
+public static readonly string Icon_DiseaseCure = "<sprite name=FS_DiseaseCure>";
+public static readonly string Icon_DiseasePrevention = "<sprite name=FS_DiseasePrevention>";
+public static readonly string Icon_Disease = "<sprite name=FS_Disease>";
+public static readonly string Icon_NightAllStat = "<sprite name=FS_NightAllStat>";
+public static readonly string Icon_SunSPD = "<sprite name=FS_SunSPD>";
+public static readonly string Icon_None = "<sprite name=FS_None>";
+public static readonly string Icon_All = "<sprite name=FS_All>";
+public static readonly string Icon_Transport = "<sprite name=FS_Transport>";
+public static readonly string Icon_AnimalSummon = "<sprite name=FS_AnimalSummon>";
+public static readonly string Icon_Drone = "<sprite name=FS_Drone>";
+public static readonly string Icon_Enemy = "<sprite name=FS_Level>";
+public static readonly string Icon_Male = "<sprite name=FS_Male>";
+public static readonly string Icon_Female = "<sprite name=FS_Female>";
+public static readonly string Icon_Star = "<sprite name=FS_Star>";
+public static readonly string Icon_Soul = "<sprite name=FS_Soul>";
+public static readonly string Icon_SoulConsume = "<sprite name=FS_SoulConsume>";
+public static readonly string Icon_ElectricPower = "<sprite name=FS_ElectricPower>";
+public static readonly string Icon_ElectricNetwork = "<sprite name=FS_ElecNetwork>";
+public static readonly string Icon_DrownX = "<sprite name=FS_DrownX>";
+public static readonly string Icon_BurnX = "<sprite name=FS_BurnX>";
+public static readonly string Icon_KnockX = "<sprite name=FS_KnockX>";
+public static readonly string Icon_DeadbodyX = "<sprite name=FS_LookDeadbodyX>";
+public static readonly string Icon_KnockB = "<sprite name=FS_Push>";
+public static readonly string Icon_CrimX = "<sprite name=FS_CrimX>";
+public static readonly string Icon_FallX = "<sprite name=FS_FallX>";
+public static readonly string Icon_Dodge = "<sprite name=FS_Dodge>";
+public static readonly string Icon_Wage = "<sprite name=FS_Wage>";
+public static readonly string Icon_Hunt = "<sprite name=FS_Hunt>";
+public static readonly string Icon_Fishing = "<sprite name=FS_Fishing>";
+public static readonly string Icon_Condition = "<sprite name=FS_Condition>";
+public static readonly string Icon_Injury = "<sprite name=FS_Injury>";
+public static readonly string Icon_Discharge = "<sprite name=FS_Discharge>";
+public static readonly string Icon_DevilTemp = "<sprite name=FS_DevilTemptation>";
+public static readonly string Icon_Resurrection = "<sprite name=FS_Resurrection>";
+public static readonly string Icon_HpGen = "<sprite name=FS_HpGen>";
+public static readonly string Icon_Thorn = "<sprite name=FS_Thorn>";
+public static readonly string Icon_ElecThorn = "<sprite name=FS_ElecThorn>";
+public static readonly string Icon_Rush = "<sprite name=FS_Rush>";
+public static readonly string Icon_Critical = "<sprite name=FS_Critical>";
+public static readonly string Icon_ElecAtk = "<sprite name=FS_ElecTrapAtk>";
+public static readonly string Icon_AtkSpd = "<sprite name=FS_AttackSpeed>";
+public static readonly string Icon_Com3 = "<sprite name=FS_ComboDmg>";
+public static readonly string Icon_Play = "<sprite name=FS_Play>";
+public static readonly string Icon_Pause = "<sprite name=FS_Pause>";
+public static readonly string Icon_Crime = "<sprite name=FS_Criminal_Lv3>";
+public static readonly string Icon_Crime_Lv1 = "<sprite name=FS_Criminal>";
+public static readonly string Icon_Crime_Lv2 = "<sprite name=FS_Criminal_Lv2>";
+public static readonly string Icon_Crime_Lv3 = "<sprite name=FS_Criminal_Lv3>";
+public static readonly string Icon_Prison = "<sprite name=FS_Prison>";
+public static readonly string Icon_Priority = "<sprite name=FS_Priority>";
+public static readonly string Icon_Theft_Damage = "<sprite name=FS_Theft_Damage>";
+public static readonly string Icon_JobPassive = "<sprite name=FS_JobPassive>";
+public static readonly string Icon_Job = "<sprite name=FS_Job>";
+public static readonly string Icon_AreaBuff = "<sprite name=FS_AreaBuff>";
+public static readonly string Icon_Target = "<sprite name=FS_Target>";
+public static readonly string Icon_Stun = "<sprite name=FS_Stun>";
+public static readonly string Icon_AllStat = "<sprite name=FS_AllStat>";
+public static readonly string Icon_AI_Product = "<sprite name=FS_AI_Product>";
+public static readonly string Icon_AI_Military = "<sprite name=FS_AI_Battle>";
+public static readonly string Icon_Hometown = "<sprite name=FS_Country_Hometown>";
+public static readonly string Icon_Relations = "<sprite name=FS_Relations>";
+public static readonly string Icon_ResCount = "<sprite name=FS_Resource_Count>";
+public static readonly string Icon_Battery = "<sprite name=FS_Battery>";
+public static readonly string Icon_DarkCitizen = "<sprite name=FS_DarkCitizen>";
+public static readonly string Icon_KeepDarkCitizen = "<sprite name=FS_KeepDarkCitizen>";
+public static readonly string Icon_SunCitizen = "<sprite name=FS_SunCitizen>";
+public static readonly string Icon_Wedding = "<sprite name=FS_Wedding>";
+public static readonly string Icon_SpiritSummon = "<sprite name=FS_SpiritSummon>";
+public static readonly string Icon_KeepSunCitizen = "<sprite name=FS_KeepSunCitizen>";
+public static readonly string Icon_BloodDrain = "<sprite name=FS_BloodDrain>";
+public static readonly string Icon_IntPropor = "<sprite name=FS_IntPropor>";
+public static readonly string Icon_AlterEgo = "<sprite name=FS_SmallEarthSpirit>";
+public static readonly string Icon_Children = "<sprite name=FS_Children>";
+public static readonly string Icon_DexPropor = "<sprite name=FS_DexPropor>";
+public static readonly string Icon_PowerPropor = "<sprite name=FS_PowerPropor>";
+public static readonly string Icon_Religion = "<sprite name=FS_Religion>";
+public static readonly string Icon_R_Dir_White = "<sprite name=FS_P_Right_White>";
+public static readonly string Icon_Partner = "<sprite name=FS_QueenMate>";
+public static readonly string Icon_QueenAbilityPoint = "<sprite name=FS_QueenAbilityPoint>";
+public static readonly string Icon_Encyclopedia = "<sprite name=FS_Encyclopedia>";
+public static readonly string Icon_Immigrant = "<sprite name=FS_Immigrant>";
+public static readonly string Icon_Policy = "<sprite name=FS_Policy>";
+public static readonly string Icon_Building = "<sprite name=FS_House>";
+public static readonly string Icon_ProsDir = "<sprite name=FS_ProsDir>";
+public static readonly string Icon_Satiety = "<sprite name=FS_Satiety>";
+public static readonly string Icon_CommercialPolicy = "<sprite name=FS_Scroll_Trade>";
+public static readonly string Icon_Dex = "<sprite name=FS_Dex>";
+public static readonly string Icon_Str = "<sprite name=FS_Str>";
+public static readonly string Icon_Int = "<sprite name=FS_Int>";
+public static readonly string[] Icon_LaborCondition = new string[2]
+{
+"<sprite name=FS_Timetable>",
+"<sprite name=FS_Worktable>"
+};
+public static readonly string[] Icon_WelfareCondition = new string[3]
+{
+"<sprite name=FS_RegularSubsidy>",
+"<sprite name=FS_MatSubsidy>",
+"<sprite name=FS_ServiceSubsidy>"
+};
+public static readonly string[] Icon_Religions = new string[4]
+{
+"",
+"<sprite name=FS_DarkCitizen>",
+"<sprite name=FS_SunCitizen>",
+""
+};
+public static readonly string[] Icon_FoodGrade = new string[3]
+{
+"<sprite name=FS_FoodGrade1>",
+"<sprite name=FS_FoodGrade2>",
+"<sprite name=FS_FoodGrade3>"
+};
+public static readonly string[] Icon_Schedule = new string[4]
+{
+"<sprite name=FS_FreeTime>",
+"<sprite name=FS_JobTime>",
+"<sprite name=FS_RestTime>",
+"<sprite name=FS_SleepTime>"
+};
+public static readonly string[] Icon_StarGrade = new string[3]
+{
+"<sprite name=FS_StarGreen>",
+"<sprite name=FS_StarYellow>",
+"<sprite name=FS_StarRed>"
+};
+public static readonly string[] Icon_PDI = new string[3]
+{
+"<sprite name=FS_Str>",
+"<sprite name=FS_Dex>",
+"<sprite name=FS_Int>"
+};
+public static readonly string Icon_ResearchPoint = "<sprite name=FS_ResearchPoint>";
+public static readonly string[] Icon_BuildCategory = new string[7]
+{
+"<sprite name=FS_Base>",
+"<sprite name=FS_RawMaterials>",
+"<sprite name=FS_Production>",
+"<sprite name=FS_Service>",
+"<sprite name=FS_Military>",
+"<sprite name=FS_Decoration>",
+"<sprite name=FS_Queen>"
+};
+public static readonly string[] Icon_Grade = new string[4]
+{
+"<sprite name=FS_NewGradeAll>",
+"<sprite name=FS_Grade1>",
+"<sprite name=FS_Grade2>",
+"<sprite name=FS_Grade3>"
+};
+public static readonly string[] Icon_Tier = new string[4]
+{
+"<sprite name=FS_NewGradeAll>",
+"<sprite name=FS_Tier1>",
+"<sprite name=FS_Tier2>",
+"<sprite name=FS_Tier3>"
+};
+public static readonly string Icon_Grade1 = "<sprite name=FS_Grade1>";
+public static readonly string Icon_Grade2 = "<sprite name=FS_Grade2>";
+public static readonly string Icon_Grade3 = "<sprite name=FS_Grade3>";
+public static readonly string Str_Left = "Left";
+public static readonly string Str_Right = "Right";
+public static readonly string Str_Up = "Up";
+public static readonly string Str_Down = "Down";
+public static readonly string Str_Both = "Both";
+public static readonly string Str_Wheel = "Wheel";
+public static readonly string Ani_WalkingDemonstration = "Walking_demonstration";
+public static readonly string Ani_WalkingAngry = "Walking_Angry";
+public static readonly string Ani_Walking = "Walking";
+public static readonly string Ani_GS_Running = "Guard_BattleRunning";
+public static readonly string Ani_Banner_Running = "BattleRunning_Banner";
+public static readonly string Ani_CrossBow_Running = "BattleRunning_CrossBow";
+public static readonly string Ani_Bow_Running = "BattleRunning_Bow";
+public static readonly string Ani_Run_Plague = "Run_Plague";
+public static readonly string Ani_IdleDemonstration = "Idle_demonstration";
+public static readonly string Ani_IdleAngry = "Idle_Angry";
+public static readonly string Ani_IdleCriminal = "Idle_Criminal";
+public static readonly string Ani_Idle = "Idle";
+public static readonly string Ani_GS_Idle = "Guard_Idle";
+public static readonly string Ani_Banner_Idle = "BattleIdle_Banner";
+public static readonly string Ani_CrossBow_Idle = "BattleIdle_CrossBow";
+public static readonly string Ani_Bow_Idle = "BattleIdle_Bow";
+public static readonly string Ani_IdleStump = "Idle_Stump";
+public static readonly string Ani_IdleFly = "Idle_fly";
+public static readonly string Ani_BattleIdle_Swd = "BattleIdle_Sword";
+public static readonly string Ani_Idle_Plague = "Idle_Plague";
+public static readonly string Ani_Lack_Hungry = "Lack_Hungry";
+public static readonly string Ani_Hello = "Hello";
+public static readonly string Ani_HelloPurgon = "Hello_Purgon";
+public static readonly string Ani_HelloUmbran = "Hello_Umbran";
+public static readonly string Ani_Lack_Clean = "Lack_Dirty";
+public static readonly string Ani_IdleSad = "Idle_Sad";
+public static readonly string Ani_Lack_Fun = "Lack_Loneliness";
+public static readonly string Ani_Debate = "Debate";
+public static readonly string Ani_Lack_Sleepy = "Lack_Sleepy";
+public static readonly string Ani_Lack_Poor = "Lack_Poor";
+public static readonly string Ani_Satisfy_Sleepy = "Satisfy_Sleep";
+public static readonly string Ani_Satisfy_Full = "Satisfy_Full";
+public static readonly string Ani_Satisfy_Clean = "Satisfy_Clean";
+public static readonly string Ani_Satisfy_Fun = "Satisfy_Fun";
+public static readonly string Ani_Satisfy_Life = "Satisfy_Life";
+public static readonly string Ani_Damage = "Damage";
+public static readonly string Ani_Death = "Death";
+public static readonly string Ani_Stun = "Faint";
+public static readonly string Ani_Fainting = "Fainting";
+public static readonly string Ani_FaintStart = "Faint_Start";
+public static readonly string Ani_Growth = "Growth";
+public static readonly string Ani_GrowthStump = "Growth_Stump";
+public static readonly string Ani_Appear = "Appear";
+public static readonly string Ani_Falling1 = "Falling";
+public static readonly string Ani_Falling2 = "Falling2";
+public static readonly string Ani_Falling_End = "Falling_End";
+public static readonly string Ani_Jumping = "Jumping";
+public static readonly string Ani_Jumping2 = "Jumping2";
+public static readonly string Ani_Jump_S = "Jump_S";
+public static readonly string Ani_Jump_M = "Jump_M";
+public static readonly string Ani_Eating = "Eating";
+public static readonly string Ani_Eating2 = "Eating2";
+public static readonly string Ani_Crying = "Crying";
+public static readonly string Ani_Running = "Running";
+public static readonly string Ani_Run = "Run";
+public static readonly string Ani_BS_Running = "BattleRunning_Sword";
+public static readonly string Ani_Gathering = "Gathering";
+public static readonly string Ani_TakeOutItem = "Take out an item";
+public static readonly string Ani_TaxCollecting1 = "TaxCollecting1";
+public static readonly string Ani_TaxCollecting2 = "TaxCollecting2";
+public static readonly string Ani_Mining = "Mining_Front2";
+public static readonly string Ani_MiningTop = "Mining_Top";
+public static readonly string Ani_WaterMining = "Gathering_Water";
+public static readonly string Ani_BuilidngFront = "Building_Front";
+public static readonly string Ani_Farming = "Farming";
+public static readonly string Ani_Farming2 = "Farming2";
+public static readonly string Ani_Felling = "Felling";
+public static readonly string Ani_Harvest = "Harvest";
+public static readonly string Ani_IdleHighlight = "Idle_Highlight";
+public static readonly string Ani_Idle_Pharmacy = "Idle_Pharmacy";
+public static readonly string Ani_Attack = "Attack";
+public static readonly string Ani_Attack2 = "Attack2";
+public static readonly string Ani_AttackFly = "Attack_fly";
+public static readonly string Ani_Atk_GS_Barrack = "Attack_Spear_Barracks";
+public static readonly string Ani_Atk_Barrack = "Attack_Sword_Barracks";
+public static readonly string Ani_Atk_Sworkd1 = "Attack_Sword_1";
+public static readonly string Ani_Atk_Sworkd4 = "Attack_Sword_4";
+public static readonly string Ani_Atk_GS = "Guard_BattleAttack";
+public static readonly string Ani_Atk_Hunt = "Attack_Sword_Hunter";
+public static readonly string Ani_Atk_Rebellion = "Attack_Sword_demonstration";
+public static readonly string Ani_Atk_BowMid = "Attack_Bow_Mid";
+public static readonly string Ani_Atk_BowTop = "Attack_Bow_Top";
+public static readonly string Ani_Atk_BowBottom = "Attack_Bow_Bot";
+public static readonly string Ani_Atk_Sworkd_Cmb1 = "AttackCombo_Sword1";
+public static readonly string Ani_Atk_Sworkd_Cmb2 = "AttackCombo_Sword2";
+public static readonly string Ani_Atk_Sworkd_Cmb3 = "AttackCombo_Sword3";
+public static readonly string Ani_Atk_LongSword = "AttackCombo_LongSword";
+public static readonly string Ani_Atk_LongHammer = "AttackCombo_Hammer";
+public static readonly string Ani_BS_LadderUp = "BattleClimbing_down";
+public static readonly string Ani_BS_DashJump = "BattleDashJump";
+public static readonly string Ani_BS_LadderDown = "BattleClimbing_down";
+public static readonly string Ani_DashJump = "DashJump";
+public static readonly string Ani_GS_DashJump = "Guard_BattleDashJump";
+public static readonly string Ani_Banner_DashJump = "BattleDashJump_Banner";
+public static readonly string Ani_CrossBow_DashJump = "BattleDashJump_CrossBow";
+public static readonly string Ani_Bow_DashJump = "BattleDashJump_Bow";
+public static readonly string Ani_BS_Jump = "BattleJump_Sword";
+public static readonly string Ani_ClimbDown = "Climbing_Down";
+public static readonly string Ani_ClimbJumpUp = "Climbing_Jump";
+public static readonly string Ani_GS_ClimbJumpUp = "Guard_BattleJump";
+public static readonly string Ani_Banner_ClimbJumpUp = "BattleJump_Banner";
+public static readonly string Ani_CrossBow_Jump = "BattleJump_CrossBow";
+public static readonly string Ani_Bow_Jump = "BattleJump_Bow";
+public static readonly string Ani_GrabToWall = "Climbing_Jump2";
+public static readonly string Ani_LadderUp = "Climbing_Up";
+public static readonly string Ani_GS_LadderUp = "Guard_Climbing";
+public static readonly string Ani_Banner_Ladder = "BattleClimbing_Banner";
+public static readonly string Ani_CrosswBow_LadderUp = "BattleClimbing_CrossBow";
+public static readonly string Ani_Bow_LadderUp = "BattleClimbing_Bow";
+public static readonly string Ani_JumpToLadder = "Climbing_JumpToLadder";
+public static readonly string Ani_FallToLadder = "Climbing_FallingToLadder";
+public static readonly string Ani_GS_LadderDown = "BattleClimbing_down";
+public static readonly string Ani_DropToGround = "Climbing_Down2";
+public static readonly string Ani_LadderIdle = "Climbing_Idle";
+public static readonly string Ani_Climbing_End = "Climbing_End";
+public static readonly string Ani_Carrying_Walking = "Carrying_Walking";
+public static readonly string Ani_Carrying_Idle = "Carrying_Idle";
+public static readonly string Ani_Carrying_ClimbingIdle = "Carrying_Climbing_Idle";
+public static readonly string Ani_Carrying_ClimibingJump = "Carrying_Jump";
+public static readonly string Ani_Carrying_DashJump = "Carrying_DashJump";
+public static readonly string Ani_Carrying_ClimbDown = "Carrying_Climbing_Down";
+public static readonly string Ani_Carrying_ClimbUp = "Carrying_Climbing_Up";
+public static readonly string Ani_Carrying_Falling = "Carrying_Falling";
+public static readonly string Ani_Carrying_JumpToLadder = "Carrying_JumpToLadder";
+public static readonly string Ani_Carrying_FallToLadder = "Carrying_FallingToLadder";
+public static readonly string Ani_Carrying_GrabToWall = "Carrying_Jump2";
+public static readonly string Ani_Carrying_DropToGround = "Carrying_Climbing_Down2";
+public static readonly string Ani_Sleep = "Sleep";
+public static readonly string Ani_Sleeping = "Sleeping";
+public static readonly string Ani_SleepStart = "Sleep_Start";
+public static readonly string Ani_SleepStart2 = "Sleep_Start2";
+public static readonly string Ani_SleepBedStart = "Sleep_bed_Start";
+public static readonly string Ani_SleepBedStart2 = "Sleep_bed_Start2";
+public static readonly string Ani_SleepBed = "Sleep_bed";
+public static readonly string Ani_SleepBed2 = "Sleep_bed2";
+public static readonly string Ani_SleepEnd = "Sleep_End";
+public static readonly string Ani_SleepBedEnd = "Sleep_bed_End";
+public static readonly string Ani_SleepBedEnd2 = "Sleep_bed_End2";
+public static readonly string Ani_Sit_Start = "Sit_Idle_Start";
+public static readonly string Ani_Sit_End = "Sit_Idle_End";
+public static readonly string Ani_Sit_Idle = "Sit_Idle";
+public static readonly string Ani_HospitalStart = "Hospital_Start";
+public static readonly string Ani_HospitalIdle = "Hospital_Idle";
+public static readonly string Ani_Shoveling = "Cemetery_Shoveling";
+public static readonly string Ani_Hospitalpatient3 = "Hospital_patient_3";
+public static readonly string Ani_Hospitalpatient4 = "Hospital_patient_4";
+public static readonly string Ani_HospitalAction3 = "Hospital_Action3";
+public static readonly string Ani_HospitalAction4 = "Hospital_Action4";
+public static readonly string Ani_KilnWork = "Ceramic";
+public static readonly string Ani_Dance = "Dance";
+public static readonly string Ani_Applaud = "Applaud";
+public static readonly string Ani_ToiletUse = "Toilet";
+public static readonly string Ani_Change = "Change";
+public static readonly string Ani_BathStart = "Bath_Start";
+public static readonly string Ani_BathEnd = "Bath_End";
+public static readonly string Ani_BathKeep = "Bath";
+public static readonly string Ani_Teaching = "Teach";
+public static readonly string Ani_Study_Start = "Study_Start";
+public static readonly string Ani_Studying1 = "Study_Idle_1";
+public static readonly string Ani_Studying2 = "Study_Idle_2";
+public static readonly string Ani_Study_End = "Study_End";
+public static readonly string Ani_Drawing = "Drawing";
+public static readonly string Ani_DrawingPose = "ModlePose";
+public static readonly string Ani_MakingIron = "Blacksmith";
+public static readonly string Ani_HairShoptSit = "HairShop_Start";
+public static readonly string Ani_HairShoptIdle = "HairShop_Idle";
+public static readonly string Ani_HairShoptEnd = "HairShop_End";
+public static readonly string Ani_HairCut_Start = "HairCut_Start";
+public static readonly string Ani_HairCut_End = "HairCut_End";
+public static readonly string Ani_HairCut_Keep = "HairCut";
+public static readonly string Ani_Laundry = "Laundry";
+public static readonly string Ani_Talking1 = "Talking_1";
+public static readonly string Ani_Talking3 = "Talking_3";
+public static readonly string Ani_Brewing = "Brewing";
+public static readonly string Ani_MakingMoney = "Mint";
+public static readonly string Ani_Workshop_Crafting = "Workshop_Crafting";
+public static readonly string Ani_Death_ByHunger = "Death";
+public static readonly string Ani_Win1 = "Win_1";
+public static readonly string Ani_TaxOffice_Idle = "TaxOffice_Idle";
+public static readonly string Ani_TaxOffice_Action = "TaxOffice_Action";
+public static readonly string Ani_Crafting = "Crafting_1";
+public static readonly string Ani_MakeMeat = "Meat";
+public static readonly string Ani_Action = "Action";
+public static readonly string Ani_Action2 = "Action2";
+public static readonly string Ani_PlagueAtk = "Attack_Plague";
+public static readonly string Ani_WoodWorkMaking = "Woodwork";
+public static readonly string Ani_LumberAction = "Lumber_Action";
+public static readonly string Ani_TanneryAction = "Tannery_Action";
+public static readonly string Ani_Squeezing = "Squeezing";
+public static readonly string Ani_Bake = "Bake";
+public static readonly string Ani_DyeWork = "DyeWorkShop_Action";
+public static readonly string Ani_ArenaIdle = "Arena_Idle";
+public static readonly string Ani_ArenaFight1 = "Arena_Fighter";
+public static readonly string Ani_ArenaFight2 = "Arena_Fighter2";
+public static readonly string Ani_ArenaCheer1 = "Arena_Cheer1";
+public static readonly string Ani_ArenaCheer2 = "Arena_Cheer2";
+public static readonly string Ani_GrinderWork = "Grinder_Action";
+public static readonly string Ani_GrillAction = "Grill_Action";
+public static readonly string Ani_MasonryAction = "Workshop_Crafting2";
+public static readonly string Ani_TaxCollect = "Deal_Duo2";
+public static readonly string Ani_PrintingAction = "Scribe _Action";
+public static readonly string Ani_WeavingAction = "WeavingLoom_Action";
+public static readonly string Ani_TradingIdle = "TradingCenter_Idle";
+public static readonly string Ani_TradingAct = "TradingCenter_Action";
+public static readonly string Ani_TradingBye = "TradingCenter_Bye";
+public static readonly string Ani_TradingStart = "TradingCenter_Start";
+public static readonly string Ani_LaboratoryAct = "Laboratory_Action";
+public static readonly string Ani_LaboratoryAct2 = "Laboratory_Action2";
+public static readonly string Ani_MassageWorkReady = "MassageBed_Start";
+public static readonly string Ani_MassageWorkIdle = "MassageBed_Idle";
+public static readonly string Ani_MassageWorkStart = "MassageBed_Action";
+public static readonly string Ani_Massage_C_Start = "MassageBed_Customer_Start";
+public static readonly string Ani_Massage_C_Idle = "MassageBed_Customer_Action";
+public static readonly string Ani_Massage_C_End = "MassageBed_Customer_End";
+public static readonly string Ani_MusicStageAction = "Music_Working";
+public static readonly string Ani_SalonStart = "Salon_Start";
+public static readonly string Ani_SalonIdle = "Salon_Idle";
+public static readonly string Ani_SalonC_Start = "Salon_Start_Customer";
+public static readonly string Ani_SalonC_Idle = "Salon_Idle_Customer";
+public static readonly string Ani_SalonC_Idle2 = "Salon_Idle_Customer2";
+public static readonly string Ani_SalonC_End = "Salon_End_Customer";
+public static readonly string Ani_CuttingAction = "ClothCut";
+public static readonly string Ani_Farm_Bat = "Farm_Bat";
+public static readonly string Ani_Farm_Silkworm = "Farm_Silkworm";
+public static readonly string Ani_Farm_Bee = "Farm_Bee";
+public static readonly string Ani_ArchiveAction = "Archive_Action";
+public static readonly string Ani_GrassFarmAction = "Water_The_Flower";
+public static readonly string Ani_GlassWorkAction = "Glassworkshop_Action";
+public static readonly string Ani_FurnaceAction = "Furnace_Action";
+public static readonly string Ani_JewelryAction = "JewelryWorkShop_Action";
+public static readonly string Ani_Meditation1 = "Meditation1";
+public static readonly string Ani_Meditation2 = "Meditation2";
+public static readonly string Ani_PubIdle = "Pub_Idle";
+public static readonly string Ani_PubPour = "Pub_Pour";
+public static readonly string Ani_Drinking = "Drinking";
+public static readonly string Ani_BandPerform = "Juggling";
+public static readonly string SlotName_Sticker_1 = "Sticker";
+public static readonly string SlotName_Sticker_2 = "Sticker2";
+public static readonly string[] Edge = new string[4]
+{
+"LUEdge",
+"RUEdge",
+"LDEdge",
+"RDEdge"
+};
+public static readonly Color Color_None = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+public static readonly Color Color_Red = new Color(1f, 0.0f, 0.0f, 1f);
+public static readonly Color32 Color32_PinkRed = new Color32(byte.MaxValue, (byte) 186, (byte) 186, byte.MaxValue);
+public static readonly Color Color_Sky = new Color(0.0f, 1f, 0.956f, 1f);
+public static readonly Color Color_Green = new Color(0.0f, 0.956f, 0.0f, 1f);
+public static readonly Color Color_Water = new Color(1f, 1f, 1f, 0.4f);
+public static readonly Color Color_Transparent = new Color(1f, 1f, 1f, 0.0f);
+public static readonly Color Color_Transparent1_3 = new Color(1f, 1f, 1f, 0.33f);
+public static readonly Color32 Color32_SlotSelectGreen = new Color32((byte) 193, byte.MaxValue, (byte) 184, byte.MaxValue);
+public static readonly Color32 Color32_Green = new Color32((byte) 50, (byte) 200, (byte) 50, byte.MaxValue);
+public static readonly Color32 Color32_DarkGreen = new Color32((byte) 0, (byte) 220, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_DarkGreen2 = new Color32((byte) 30, (byte) 138, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_Red = new Color32((byte) 200, (byte) 50, (byte) 50, byte.MaxValue);
+public static readonly Color32 Color32_LightRed = new Color32(byte.MaxValue, (byte) 0, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_LBlue = new Color32((byte) 50, (byte) 150, (byte) 250, byte.MaxValue);
+public static readonly Color32 Color32_AllianceBlue = new Color32((byte) 50, (byte) 200, (byte) 250, byte.MaxValue);
+public static readonly Color32 Color32_Yellow = new Color32(byte.MaxValue, (byte) 227, (byte) 49, byte.MaxValue);
+public static readonly Color32 Color32_Gray = new Color32((byte) 150, (byte) 150, (byte) 150, byte.MaxValue);
+public static readonly Color32 Color32_DarkGray = new Color32((byte) 80 /*0x50*/, (byte) 80 /*0x50*/, (byte) 80 /*0x50*/, byte.MaxValue);
+public static readonly Color32 Color32_Workmark = new Color32((byte) 178, (byte) 162, (byte) 132, byte.MaxValue);
+public static readonly Color32 Color32_SlotSelectRed = new Color32(byte.MaxValue, (byte) 186, (byte) 186, byte.MaxValue);
+public static readonly Color32 Color32_Bronze = new Color32((byte) 230, (byte) 160 /*0xA0*/, (byte) 110, byte.MaxValue);
+public static readonly Color32 Color32_Silver = new Color32((byte) 200, (byte) 200, (byte) 200, byte.MaxValue);
+public static readonly Color32 Color32_Gold = new Color32((byte) 250, (byte) 200, (byte) 50, byte.MaxValue);
+public static readonly Color32 Color32_DeepGold = new Color32(byte.MaxValue, (byte) 160 /*0xA0*/, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_Orange = new Color32((byte) 250, (byte) 150, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_Carrot = new Color32((byte) 250, (byte) 75, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_Sky = new Color32((byte) 0, (byte) 210, byte.MaxValue, byte.MaxValue);
+public static readonly Color32 Color32_Brown = new Color32((byte) 149, (byte) 56, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_Ivory = new Color32((byte) 220, (byte) 210, (byte) 180, byte.MaxValue);
+public static readonly Color32 Color32_White = new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
+public static readonly Color32 Color32_Description = new Color32((byte) 171, (byte) 84, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_DeepRed = new Color32((byte) 200, (byte) 50, (byte) 50, byte.MaxValue);
+public static readonly Color32 Color32_DeepGreen = new Color32((byte) 30, (byte) 138, (byte) 0, byte.MaxValue);
+public static readonly Color32 Color32_DeepCarrot = new Color32((byte) 234, (byte) 107, (byte) 72, byte.MaxValue);
+public static readonly Color32 Color32_DeepScroll = new Color32((byte) 229, (byte) 164, (byte) 81, byte.MaxValue);
+public static readonly Color32 Color32_LightScroll = new Color32((byte) 228, (byte) 195, (byte) 153, byte.MaxValue);
+public static readonly Color32 Color32_SunReligion = new Color32((byte) 124, byte.MaxValue, (byte) 208 /*0xD0*/, byte.MaxValue);
+public static readonly Color32 Color32_DarkReligion = new Color32(byte.MaxValue, (byte) 142, byte.MaxValue, byte.MaxValue);
+public static readonly Color32[] Color_TorchFire = new Color32[5]
+{
+new Color32(byte.MaxValue, (byte) 93, (byte) 0, byte.MaxValue),
+new Color32(byte.MaxValue, (byte) 176 /*0xB0*/, (byte) 49, byte.MaxValue),
+new Color32(byte.MaxValue, (byte) 141, (byte) 254, byte.MaxValue),
+new Color32((byte) 150, byte.MaxValue, (byte) 231, byte.MaxValue),
+new Color32((byte) 112 /*0x70*/, (byte) 218, (byte) 70, byte.MaxValue)
+};
+public static readonly Color32[] Color_UI_Depth = new Color32[3]
+{
+new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
+new Color32((byte) 206, byte.MaxValue, (byte) 196, byte.MaxValue),
+new Color32((byte) 116, (byte) 250, (byte) 67, byte.MaxValue)
+};
+public static readonly Color[] Color_Flag = new Color[12]
+{
+Color.red,
+Color.blue,
+Color.green,
+Color.yellow,
+Color.grey,
+(Color) new Color32(byte.MaxValue, (byte) 0, byte.MaxValue, byte.MaxValue),
+(Color) new Color32((byte) 0, byte.MaxValue, byte.MaxValue, byte.MaxValue),
+Color.white,
+Color.black,
+(Color) new Color32(byte.MaxValue, (byte) 117, (byte) 0, byte.MaxValue),
+(Color) new Color32((byte) 166, (byte) 87, (byte) 0, byte.MaxValue),
+(Color) new Color32((byte) 0, (byte) 113, (byte) 53, byte.MaxValue)
+};
+public static readonly Color[] Color_Flag2 = new Color[3]
+{
+Color.red,
+Color.blue,
+Color.green
+};
+public static readonly Color[] Color_Network = new Color[15]
+{
+Color.red,
+Color.white,
+Color.blue,
+Color.green,
+Color.grey,
+Color.black,
+(Color) new Color32((byte) 0, byte.MaxValue, (byte) 249, byte.MaxValue),
+(Color) new Color32(byte.MaxValue, (byte) 114, (byte) 0, byte.MaxValue),
+(Color) new Color32(byte.MaxValue, (byte) 0, (byte) 240 /*0xF0*/, byte.MaxValue),
+(Color) new Color32(byte.MaxValue, (byte) 0, (byte) 142, byte.MaxValue),
+(Color) new Color32(byte.MaxValue, (byte) 0, (byte) 142, byte.MaxValue),
+(Color) new Color32((byte) 0, byte.MaxValue, (byte) 151, byte.MaxValue),
+(Color) new Color32((byte) 0, byte.MaxValue, (byte) 151, byte.MaxValue),
+(Color) new Color32((byte) 151, byte.MaxValue, (byte) 0, byte.MaxValue),
+(Color) new Color32((byte) 174, byte.MaxValue, (byte) 0, (byte) 118)
+};
+public static readonly string Hex_LightGreen = "#00F400";
+public static readonly string Hex_DarkGreen = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DarkGreen2);
+public static readonly string Hex_Gold = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Gold);
+public static readonly string Hex_DeepGold = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DeepGold);
+public static readonly string Hex_Silver = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Silver);
+public static readonly string Hex_Bronze = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Bronze);
+public static readonly string Hex_Green = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Green);
+public static readonly string Hex_DeepGreen = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DeepGreen);
+public static readonly string Hex_Red = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Red);
+public static readonly string Hex_DeepRed = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DeepRed);
+public static readonly string Hex_LightRed = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_LightRed);
+public static readonly string Hex_PinkRed = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_PinkRed);
+public static readonly string Hex_LightBlue = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_LBlue);
+public static readonly string Hex_Yellow = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Yellow);
+public static readonly string Hex_Gray = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Gray);
+public static readonly string Hex_White = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_White);
+public static readonly string Hex_Description = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Description);
+public static readonly string Hex_DeepCarrot = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DeepCarrot);
+public static readonly string Hex_Ivory = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_Ivory);
+public static readonly string Hex_AllianceBlue = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_AllianceBlue);
+public static readonly string Hex_ProsTitle = "#915000";
+public static readonly string Hex_Purple = "#F52DC1";
+public static readonly string Hex_SunReligion = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_SunReligion);
+public static readonly string Hex_DarkReligion = "#" + ColorUtility.ToHtmlStringRGB((Color) Defines.Color32_DarkReligion);
+public static readonly string Hex_NameDarkReligion = "#ffbbff";
+public static readonly string Hex_NameSunReligion = "#aeffff";
+public static float Pay_ObjDelivery = 1f;
+public static float Pay_ObjDelivery_Origin = 1f;
