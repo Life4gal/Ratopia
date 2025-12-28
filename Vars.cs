@@ -14,12 +14,13 @@ public static class Vars
 	public static readonly string FilePathQueenCharacterRaw = Path.Combine(PluginFolder, "QueenCharacterRaw.json");
 
 	public static readonly string FilePathProsperity = Path.Combine(PluginFolder, "Prosperity.json");
-	public static readonly string FilePathProsperityRaw = Path.Combine(PluginFolder, "ProsperityRaw.json");
+	// public static readonly string FilePathProsperityRaw = Path.Combine(PluginFolder, "ProsperityRaw.json");
 
 	public static readonly string FilePathResource = Path.Combine(PluginFolder, "Resource.json");
 	public static readonly string FilePathResourceRaw = Path.Combine(PluginFolder, "ResourceRaw.json");
 
-	// public static readonly string FilePathPlant = Path.Combine(PluginFolder, "Plant.json");
+	public static readonly string FilePathPlant = Path.Combine(PluginFolder, "Plant.json");
+	public static readonly string FilePathPlantRaw = Path.Combine(PluginFolder, "PlantRaw.json");
 
 	public static readonly string FilePathBuilding = Path.Combine(PluginFolder, "Building.json");
 	public static readonly string FilePathBuildingRaw = Path.Combine(PluginFolder, "BuildingRaw.json");
@@ -28,5 +29,4 @@ public static class Vars
 	public static readonly string FilePathItemRaw = Path.Combine(PluginFolder, "ItemRaw.json");
 
 	// public static readonly string FilePathRatron = Path.Combine(PluginFolder, "Ratron.json");
-	// public static readonly string FilePathRecipe = Path.Combine(PluginFolder, "Recipe.json");
 }
