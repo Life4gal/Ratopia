@@ -12,7 +12,12 @@ public class DatabaseQueenCharacter
 {
 	private class Entry
 	{
+		// 名称
 		public string Name;
+
+		// 女王角色附加能力(以','分隔)
+		// 如战士(Warrior)提供+1攻击力和+20HP(ATK(1), HP(20))
+		// Helpers.StringToEnum<Res_Ability>(ability)
 		public string Ability;
 	}
 
