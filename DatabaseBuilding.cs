@@ -326,7 +326,7 @@ public class DatabaseBuilding
 					})
 					.ToList();
 
-				var jsonContentRaw = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
+				var jsonContentRaw = JsonConvert.SerializeObject(fileContentRaw, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
 				File.WriteAllText(Vars.FilePathBuildingRaw, jsonContentRaw);
