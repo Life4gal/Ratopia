@@ -28,19 +28,19 @@ public class DatabaseResource
 		public Recipe RecipeC;
 	}
 
-	private static bool IsUsableResource(Res_DB1.Param item)
+	private static bool IsUsableResource(in Res_DB1.Param item)
 	{
 		return item.Category is 1 or 2;
 	}
 
-	private static string AbilityOfResource(Res_DB1.Param item)
+	private static string AbilityOfResource(in Res_DB1.Param item)
 	{
 		return IsUsableResource(item)
 			? item.Ability
 			: "This resource is unusable, so no ability can be provided.(Any settings will be ignored)";
 	}
 
-	private static void SetAbilityOfResource(Res_DB1.Param item, string ability)
+	private static void SetAbilityOfResource(ref Res_DB1.Param item, string ability)
 	{
 		if (IsUsableResource(item))
 		{
@@ -48,19 +48,19 @@ public class DatabaseResource
 		}
 	}
 
-	private static bool IsMinableResource(Res_DB1.Param item)
+	private static bool IsMinableResource(in Res_DB1.Param item)
 	{
 		return item.Category == 0;
 	}
 
-	private static string MineOfResource(Res_DB1.Param item)
+	private static string MineOfResource(in Res_DB1.Param item)
 	{
 		return IsMinableResource(item)
 			? item.Mine
 			: "This resource is unminable.(Any settings will be ignored)";
 	}
 
-	private static void SetMineOfResource(Res_DB1.Param item, string mine)
+	private static void SetMineOfResource(ref Res_DB1.Param item, string mine)
 	{
 		if (IsMinableResource(item))
 		{
@@ -86,8 +86,10 @@ public class DatabaseResource
 			{
 				var sheet = db.sheets[0];
 
-				var fileContent = sheet.list
+				var fileContentRaw = sheet.list
 					.Where(item => item.Enable != 0)
+					.ToList();
+				var fileContent = fileContentRaw
 					.Select(item => new Entry
 					{
 						Name = item.Name,
@@ -101,9 +103,13 @@ public class DatabaseResource
 							{ Material = item.Material_C, Quantity = item.Product_C, Workload = item.BP_C }
 					})
 					.ToList();
+
+				var jsonContentRaw = JsonConvert.SerializeObject(fileContentRaw, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
+				File.WriteAllText(Vars.FilePathResourceRaw, jsonContentRaw);
 				File.WriteAllText(Vars.FilePathResource, jsonContent);
+
 				Vars.LogForHarmony.LogInfo("[Resource] Bump File Succeed");
 			}
 			catch (Exception e)
@@ -186,8 +192,8 @@ public class DatabaseResource
 
 					Vars.LogForHarmony.LogInfo(log);
 
-					SetAbilityOfResource(item, entry.Ability);
-					SetMineOfResource(item, entry.Mine);
+					SetAbilityOfResource(ref item, entry.Ability);
+					SetMineOfResource(ref item, entry.Mine);
 					item.Material_A = entry.RecipeA.Material;
 					item.Product_A = entry.RecipeA.Quantity;
 					item.BP_A = entry.RecipeA.Workload;

@@ -21,63 +21,77 @@ public class DatabaseItem
 		public string Ability;
 	}
 
+	private class FileContentRaw
+	{
+		public List<Item_DB1.Param> Weapon;
+		public List<Item_DB1.Param> Clothes;
+		public List<Item_DB1.Param> Accessory;
+	}
+
 	private class FileContent
 	{
 		public List<Entry> Weapon;
 		public List<Entry> Clothes;
 		public List<Entry> Accessory;
+	}
 
-		public static List<Entry> FilterEntries(List<Item_DB1.Param> items)
-		{
-			return items
-				.Where(item => item.Enable != 0)
-				.Select(item => new Entry
-				{
-					Enable = item.Enable,
-					Name = item.Name,
-					Recipe = item.Recipe,
-					Ability = item.Ability
-				})
-				.ToList();
-		}
+	private static List<Item_DB1.Param> FilterItem(in List<Item_DB1.Param> items)
+	{
+		return items
+			.Where(item => item.Enable != 0)
+			.ToList();
+	}
 
-		public static void ApplyEntries(List<Item_DB1.Param> items, List<Entry> entries)
-		{
-			foreach (var entry in entries)
+	private static List<Entry> FilterItemToEntries(in List<Item_DB1.Param> items)
+	{
+		return items
+			.Where(item => item.Enable != 0)
+			.Select(item => new Entry
 			{
-				var item = items.Find(item => item.Name == entry.Name);
-				if (item == null)
-				{
-					Vars.LogForHarmony.LogWarning($"[Item] Patch Failed: item {entry.Name} not found");
-					continue;
-				}
+				Enable = item.Enable,
+				Name = item.Name,
+				Recipe = item.Recipe,
+				Ability = item.Ability
+			})
+			.ToList();
+	}
 
-				if (item.Enable == 0)
-				{
-					Vars.LogForHarmony.LogInfo($"[Item] Patch Skipped: item {entry.Name} not enabled");
-					continue;
-				}
-
-				if (item.Enable == entry.Enable && item.Recipe == entry.Recipe && item.Ability == entry.Ability)
-				{
-					Vars.LogForHarmony.LogInfo(
-						$"[Item] Patch Skipped: item [{entry.Name}] not changed"
-					);
-					continue;
-				}
-
-				Vars.LogForHarmony.LogInfo(
-					$"[Item]\n" +
-					$"{entry.Name}: " +
-					$"\n\tEnable: [{item.Enable}] ==> [{entry.Enable}]" +
-					$"\n\tRecipe: [{item.Recipe}] ==> [{entry.Recipe}]" +
-					$"\n\tAbility: [{item.Ability}] ==> [{entry.Ability}]"
-				);
-
-				item.Enable = entry.Enable;
-				item.Recipe = entry.Recipe;
-				item.Ability = entry.Ability;
+	private static void ApplyItemFromEntries(ref List<Item_DB1.Param> items, in List<Entry> entries)
+	{
+		foreach (var entry in entries)
+		{
+			var item = items.Find(item => item.Name == entry.Name);
+			if (item == null)
+			{
+				Vars.LogForHarmony.LogWarning($"[Item] Patch Failed: item {entry.Name} not found");
+				continue;
 			}
+
+			if (item.Enable == 0)
+			{
+				Vars.LogForHarmony.LogInfo($"[Item] Patch Skipped: item {entry.Name} not enabled");
+				continue;
+			}
+
+			if (item.Enable == entry.Enable && item.Recipe == entry.Recipe && item.Ability == entry.Ability)
+			{
+				Vars.LogForHarmony.LogInfo(
+					$"[Item] Patch Skipped: item [{entry.Name}] not changed"
+				);
+				continue;
+			}
+
+			Vars.LogForHarmony.LogInfo(
+				$"[Item]\n" +
+				$"{entry.Name}: " +
+				$"\n\tEnable: [{item.Enable}] ==> [{entry.Enable}]" +
+				$"\n\tRecipe: [{item.Recipe}] ==> [{entry.Recipe}]" +
+				$"\n\tAbility: [{item.Ability}] ==> [{entry.Ability}]"
+			);
+
+			item.Enable = entry.Enable;
+			item.Recipe = entry.Recipe;
+			item.Ability = entry.Ability;
 		}
 	}
 
@@ -101,14 +115,24 @@ public class DatabaseItem
 				var clothList = db.sheets[1].list;
 				var accessoryList = db.sheets[2].list;
 
-				var weapon = FileContent.FilterEntries(weaponList);
-				var cloth = FileContent.FilterEntries(clothList);
-				var accessory = FileContent.FilterEntries(accessoryList);
+				var weaponRaw = FilterItem(in weaponList);
+				var clothRaw = FilterItem(in clothList);
+				var accessoryRaw = FilterItem(in accessoryList);
 
+				var weapon = FilterItemToEntries(in weaponList);
+				var cloth = FilterItemToEntries(in clothList);
+				var accessory = FilterItemToEntries(in accessoryList);
+
+				var fileContentRaw = new FileContentRaw
+					{ Weapon = weaponRaw, Clothes = clothRaw, Accessory = accessoryRaw };
 				var fileContent = new FileContent { Weapon = weapon, Clothes = cloth, Accessory = accessory };
+
+				var jsonContentRaw = JsonConvert.SerializeObject(fileContentRaw, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
+				File.WriteAllText(Vars.FilePathItemRaw, jsonContentRaw);
 				File.WriteAllText(Vars.FilePathItem, jsonContent);
+
 				Vars.LogForHarmony.LogInfo("[Item] Bump File Succeed");
 			}
 			catch (Exception e)
@@ -131,9 +155,9 @@ public class DatabaseItem
 				var clothList = db.sheets[1].list;
 				var accessoryList = db.sheets[2].list;
 
-				FileContent.ApplyEntries(weaponList, weapon);
-				FileContent.ApplyEntries(clothList, cloth);
-				FileContent.ApplyEntries(accessoryList, accessory);
+				ApplyItemFromEntries(ref weaponList, in weapon);
+				ApplyItemFromEntries(ref clothList, in cloth);
+				ApplyItemFromEntries(ref accessoryList, in accessory);
 
 				Vars.LogForHarmony.LogInfo("[Item] Patch Succeed");
 			}

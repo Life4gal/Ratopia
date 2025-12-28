@@ -34,17 +34,23 @@ public class DatabaseQueenCharacter
 			{
 				var sheet = db.sheets[0];
 
-				var fileContent = sheet.list
+				var fileContentRaw = sheet.list
 					.Where(item => item.Enable != 0)
+					.ToList();
+				var fileContent = fileContentRaw
 					.Select(item => new Entry
 					{
 						Name = item.Name,
 						Ability = item.Ability,
 					})
 					.ToList();
+
+				var jsonContentRaw = JsonConvert.SerializeObject(fileContentRaw, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
+				File.WriteAllText(Vars.FilePathQueenCharacterRaw, jsonContentRaw);
 				File.WriteAllText(Vars.FilePathQueenCharacter, jsonContent);
+
 				Vars.LogForHarmony.LogInfo("[QueenCharacter] Bump File Succeed");
 			}
 			catch (Exception e)

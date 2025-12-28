@@ -304,8 +304,10 @@ public class DatabaseBuilding
 			{
 				var sheet = db.sheets[0];
 
-				var fileContent = sheet.list
+				var fileContentRaw = sheet.list
 					.Where(item => item.Enable != 0)
+					.ToList();
+				var fileContent = fileContentRaw
 					.Select(item => new Entry
 					{
 						Name = item.Name,
@@ -323,9 +325,13 @@ public class DatabaseBuilding
 						EffectValue = GetBuildingEffect(in item),
 					})
 					.ToList();
+
+				var jsonContentRaw = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
 
+				File.WriteAllText(Vars.FilePathBuildingRaw, jsonContentRaw);
 				File.WriteAllText(Vars.FilePathBuilding, jsonContent);
+
 				Vars.LogForHarmony.LogInfo("[Building] Bump File Succeed");
 			}
 			catch (Exception e)
