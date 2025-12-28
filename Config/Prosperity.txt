@@ -1,7 +1,0 @@
-繁荣度等级
-
-Name: 名称
-NeedValue: 进入下一级需要的繁荣度分数
-Pop: 当前等级人口上限
-CitizenAbilityValue: 移民等级上限(1~上限)
-PolicyNum: 法典石碑制定的法条额外数量(不算基础数量)

@@ -12,10 +12,19 @@ public class DatabaseProsperity
 {
 	private class Entry
 	{
+		// 名称
 		public string Name;
+
+		// 进入下一级需要的繁荣度分数
 		public int NeedValue;
+
+		// 当前等级人口上限
 		public int Pop;
+
+		// 移民等级上限(1~上限)
 		public int CitizenAbilityValue;
+
+		// 法典石碑制定的法条额外数量(不算基础数量)
 		public int PolicyNum;
 	}
 
