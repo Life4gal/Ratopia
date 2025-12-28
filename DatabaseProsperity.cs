@@ -77,7 +77,7 @@ public class DatabaseProsperity
 
 					if (
 						item.NeedValue == entry.NeedValue &&
-						item.Pop == entry.PolicyNum &&
+						item.Pop == entry.Pop &&
 						item.CitizenAbilityValue == entry.CitizenAbilityValue &&
 						item.PolicyNum == entry.PolicyNum
 					)
