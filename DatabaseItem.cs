@@ -12,12 +12,22 @@ public class DatabaseItem
 {
 	private class Entry
 	{
-		// 0 == disable
-		// 1 == enable
-		// others == unlock when conditions are met
+		// 0 == 禁用
+		// 1 == 默认可用
+		// others == 满足条件时解锁
 		public int Enable;
+
+		// 名称
 		public string Name;
+
+		// 配方(以','分隔)
+		// 如木弓(WoodBow)需要2木材+1绳子(Lumber(2), Rope(1))
+		// Helpers.StringToEnum<TileType>(resource)
 		public string Recipe;
+
+		// 武器附加能力(以','分隔)
+		// 如木弓(WoodBow)提供+2攻击力和+10%移动速度(ATK(2), SPD(0.1))
+		// Helpers.StringToEnum<Res_Ability>(ability)
 		public string Ability;
 	}
 
@@ -125,7 +135,8 @@ public class DatabaseItem
 
 				var fileContentRaw = new FileContentRaw
 					{ Weapon = weaponRaw, Clothes = clothRaw, Accessory = accessoryRaw };
-				var fileContent = new FileContent { Weapon = weapon, Clothes = cloth, Accessory = accessory };
+				var fileContent = new FileContent
+					{ Weapon = weapon, Clothes = cloth, Accessory = accessory };
 
 				var jsonContentRaw = JsonConvert.SerializeObject(fileContentRaw, Formatting.Indented);
 				var jsonContent = JsonConvert.SerializeObject(fileContent, Formatting.Indented);
