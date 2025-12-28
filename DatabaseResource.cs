@@ -19,54 +19,112 @@ public class DatabaseResource
 			public int Workload;
 		}
 
+		// 名称
+		// Helpers.StringToEnum<TileType>(Name)
 		public string Name;
+
+		// 类型
+		// 如默认为0 ==> (ResCateogry)0 ==> ResCateogry.None
+		// 如食物为1 ==> (ResCateogry)1 ==> ResCateogry.Food
+		// 如生活用品为2 ==> (ResCateogry)2 ==> ResCateogry.Life
+		// 如不可破坏为99 ==> (ResCateogry)99 ==> ResCateogry.Unbreakable
+		// (ResCateogry)Category
+		public int Category;
+
+		// 资源提供的能力加成(以','分隔)
+		// 只有食物和生活用品才有效
+		// 如蛋糕(Cake)提供敏捷+3和+3智力和+10%食物消耗速度(DEX(3), INT(3), HUG(0.1)) (如果是-10%食物消耗速度则是HUG(-0.1))
+		// Helpers.StringToEnum<Res_Ability>(ability)
 		public string Ability;
+
+		// 可以获取该材料的瓦片,例如Grass(3)表示挖取一个Grass可以得到三个产品(可以以,分隔指定多个瓦片)
+		// Helpers.StringToEnum<TileType>(mine)
 		public string Mine;
+
+		// Material_A + Product_A + BP_A: 配方A的"所需材料" + "产品数量" + "工作量"
+		// Material_B + Product_B + BP_B: 配方B的"所需材料" + "产品数量" + "工作量"
+		// Material_C + Product_C + BP_C: 配方C的"所需材料" + "产品数量" + "工作量"
+		// 例如
+		// "Material_C": "Dirt(1)",
+		// "Product_C": 20,
+		// "BP_C": 50
+		// 表示消耗一个Dirt和50工作量可以生成20个产品
 
 		public Recipe RecipeA;
 		public Recipe RecipeB;
 		public Recipe RecipeC;
 	}
 
-	private static bool IsUsableResource(in Res_DB1.Param item)
+	// ================================================
+	// 判断资源类型
+	// ================================================
+
+	private static bool IsFoodResource(in Res_DB1.Param item)
 	{
-		return item.Category is 1 or 2;
+		return (ResCateogry)item.Category == ResCateogry.Food;
 	}
 
-	private static string AbilityOfResource(in Res_DB1.Param item)
+	private static bool IsLifeResource(in Res_DB1.Param item)
 	{
-		return IsUsableResource(item)
-			? item.Ability
-			: "This resource is unusable, so no ability can be provided.(Any settings will be ignored)";
+		return (ResCateogry)item.Category == ResCateogry.Life;
 	}
 
-	private static void SetAbilityOfResource(ref Res_DB1.Param item, string ability)
+	private static bool IsFoodOrLifeResource(in Res_DB1.Param item)
 	{
-		if (IsUsableResource(item))
-		{
-			item.Ability = ability;
-		}
+		return IsFoodResource(item) || IsLifeResource(item);
 	}
 
 	private static bool IsMinableResource(in Res_DB1.Param item)
 	{
-		return item.Category == 0;
+		// todo: 更严格的检查
+		return (ResCateogry)item.Category == ResCateogry.None;
 	}
 
-	private static string MineOfResource(in Res_DB1.Param item)
+	// ================================================
+	// 获取资源效果
+	// ================================================
+
+	private static string GetResourceAbility(in Res_DB1.Param item)
+	{
+		return IsFoodOrLifeResource(item)
+			? item.Ability
+			: "This resource is unusable, so no ability can be provided.(Any settings will be ignored)";
+	}
+
+	private static string GetResourceMine(in Res_DB1.Param item)
 	{
 		return IsMinableResource(item)
 			? item.Mine
 			: "This resource is unminable.(Any settings will be ignored)";
 	}
 
-	private static void SetMineOfResource(ref Res_DB1.Param item, string mine)
+	// ================================================
+	// 设置资源效果
+	// ================================================
+
+	private static void SetResourceAbility(ref Res_DB1.Param item, string ability)
 	{
-		if (IsMinableResource(item))
+		if (!IsFoodOrLifeResource(item))
 		{
-			item.Mine = mine;
+			return;
 		}
+
+		item.Ability = ability;
 	}
+
+	private static void SetResourceMine(ref Res_DB1.Param item, string mine)
+	{
+		if (!IsMinableResource(item))
+		{
+			return;
+		}
+
+		item.Mine = mine;
+	}
+
+	// ================================================
+	// PATCH
+	// ================================================
 
 	[HarmonyPrefix]
 	private static void Prefix(DB_Mgr __instance)
@@ -93,8 +151,9 @@ public class DatabaseResource
 					.Select(item => new Entry
 					{
 						Name = item.Name,
-						Ability = AbilityOfResource(item),
-						Mine = MineOfResource(item),
+						Category = item.Category,
+						Ability = GetResourceAbility(item),
+						Mine = GetResourceMine(item),
 						RecipeA = new Entry.Recipe
 							{ Material = item.Material_A, Quantity = item.Product_A, Workload = item.BP_A },
 						RecipeB = new Entry.Recipe
@@ -141,9 +200,16 @@ public class DatabaseResource
 						continue;
 					}
 
+					if (item.Category != entry.Category)
+					{
+						Vars.LogForHarmony.LogWarning(
+							$"[Resource] Patch Failed: item {entry.Name} category mismatch ({item.Category} != {entry.Category})");
+						continue;
+					}
+
 					if (
-						(!IsUsableResource(item) || AbilityOfResource(item) == entry.Ability) &&
-						(!IsMinableResource(item) || MineOfResource(item) == entry.Mine) &&
+						(!IsFoodOrLifeResource(item) || GetResourceAbility(item) == entry.Ability) &&
+						(!IsMinableResource(item) || GetResourceMine(item) == entry.Mine) &&
 						item.Material_A == entry.RecipeA.Material &&
 						item.Product_A == entry.RecipeA.Quantity &&
 						item.BP_A == entry.RecipeA.Workload &&
@@ -164,14 +230,14 @@ public class DatabaseResource
 					var log =
 						$"[Resource]\n" +
 						$"{entry.Name}: ";
-					if (IsUsableResource(item))
+					if (IsFoodOrLifeResource(item))
 					{
-						log += $"\n\tAbility: [{AbilityOfResource(item)}] ==> [{entry.Ability}]";
+						log += $"\n\tAbility: [{GetResourceAbility(item)}] ==> [{entry.Ability}]";
 					}
 
 					if (IsMinableResource(item))
 					{
-						log += $"\n\tMine: [{MineOfResource(item)}] ==> [{entry.Mine}]";
+						log += $"\n\tMine: [{GetResourceMine(item)}] ==> [{entry.Mine}]";
 					}
 
 					log +=
@@ -192,8 +258,8 @@ public class DatabaseResource
 
 					Vars.LogForHarmony.LogInfo(log);
 
-					SetAbilityOfResource(ref item, entry.Ability);
-					SetMineOfResource(ref item, entry.Mine);
+					SetResourceAbility(ref item, entry.Ability);
+					SetResourceMine(ref item, entry.Mine);
 					item.Material_A = entry.RecipeA.Material;
 					item.Product_A = entry.RecipeA.Quantity;
 					item.BP_A = entry.RecipeA.Workload;
